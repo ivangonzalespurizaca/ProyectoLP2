@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorate="~{Recepcionista/recepcionistaLayout}">
+<head>
+    <title>Recepcionista</title>
+
+</head>
+<body>
+	<section layout:fragment="contenido">
+		<h2>Bienvenido al recepcionista</h2>
+		<p>Solo accesible por usuarios con rol recep.</p>
+
+		<form th:action="@{/usuarios/logout}" method="post">
+		        <button type="submit">Cerrar sesión</button>
+		   </form>
+		   
+		   <h2>hola gentita</h2>
+		
+	</section>
+</body>
+</html>
+

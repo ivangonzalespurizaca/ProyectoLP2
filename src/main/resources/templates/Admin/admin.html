@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+layout:decorate="~{Admin/adminLayout}">
+<head>
+    <title>Admin</title>
+
+</head>
+<body>
+	<section layout:fragment="contenido">
+		
+		
+		<h2>Bienvenido Administrador</h2>
+		<p>Solo accesible por usuarios con rol ADMIN.</p>
+
+		<form th:action="@{/usuarios/logout}" method="post">
+		    <button type="submit">Cerrar sesión</button>
+		</form>
+
+		<hr>
+		<h2>Hola mano como estas</h2>
+
+		<h3>Reportes</h3>
+		<!-- Botón para generar el reporte -->
+		<form th:action="@{/ProductosReport}" method="get" target="_blank">
+		    <button type="submit">Generar Reporte de Productos</button>
+		</form>
+		
+		
+		
+		
+	</section>
+</body>
+</html>
