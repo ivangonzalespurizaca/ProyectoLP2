@@ -20,5 +20,6 @@ public interface PacienteService {
 	
 	//Busca un paciente específico por su ID.
 	public Paciente buscarPacienteById(Integer id);
-
+	
+	public List<Paciente> buscarPacientePorNombre(String nombre);
 }

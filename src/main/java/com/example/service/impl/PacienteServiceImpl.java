@@ -46,4 +46,10 @@ public class PacienteServiceImpl implements  PacienteService {
 		return pacienteRepository.findById(id).get();
 	}
 
+	@Override
+	public List<Paciente> buscarPacientePorNombre(String nombre) {
+		// TODO Auto-generated method stub
+		return pacienteRepository.findByNombreStartingWithIgnoreCase(nombre);
+	}
+
 }

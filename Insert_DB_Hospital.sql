@@ -48,11 +48,11 @@ VALUES
 (5, 'VIERNES', '10:00:00', '16:00:00');
 
 -- CITAS
-INSERT INTO Cita (ID_MEDICO, ID_Paciente, ID_Usuario, Fecha_Cita, Motivo)
+INSERT INTO Cita (ID_MEDICO, ID_Paciente, ID_Usuario, Fecha, Hora, Motivo)
 VALUES
-(1, 1, 3, '2025-10-10 09:00:00', 'Dolor de cabeza y fiebre'),
-(2, 2, 3, '2025-10-09 08:00:00', 'Consulta pediátrica general'),
-(4, 3, 3, '2025-10-08 09:00:00', 'Chequeo cardiológico');
+(1, 1, 3, '2025-10-24', '09:00:00', 'Dolor de cabeza y fiebre'),
+(2, 2, 3, '2025-10-23', '08:00:00', 'Consulta pediátrica general'),
+(4, 3, 3, '2025-10-28', '09:00:00', 'Chequeo cardiológico');
 
 -- COMPROBANTES DE PAGO
 INSERT INTO Comprobante_Pago (ID_Cita, Nombre_Pagador, Apellidos_Pagador, DNI_Pagador, Contacto_Pagador, Monto, Metodo_Pago)
@@ -60,3 +60,5 @@ VALUES
 (1, 'Javier', 'Mendoza Castillo', '74851236', '987321654', 80.00, 'EFECTIVO'),
 (2, 'Lucía', 'Ramírez Paredes', '71589423', '956478213', 100.00, 'TARJETA'),
 (3, 'Carlos', 'Torres Huamán', '73214589', '945612378', 120.00, 'TRANSFERENCIA');
+
+
