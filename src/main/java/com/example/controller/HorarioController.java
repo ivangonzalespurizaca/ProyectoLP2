@@ -41,7 +41,7 @@ public class HorarioController {
         nuevoHorario.setMedico(medico);
         model.addAttribute("nuevoHorario", nuevoHorario);
 
-        List<Medico> listaMedicos = medicoService.listarTodoMedico();
+        List<Medico> listaMedicos = medicoService.listarTodosMedicos();
         model.addAttribute("listaMedicos", listaMedicos);
 
         return "Admin/horario/gestionarHorarios";
@@ -52,7 +52,7 @@ public class HorarioController {
 	@ResponseBody
 	public List<Medico> buscarMedicoJson(@RequestParam(required =false) String nombre) {
 	    if (nombre == null || nombre.trim().isEmpty()) {
-	        return medicoService.listarTodoMedico();
+	        return medicoService.listarTodosMedicos();
 	    }
 		return medicoService.buscarMedicoPorNombre(nombre);
 	}

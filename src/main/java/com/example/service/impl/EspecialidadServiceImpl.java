@@ -16,7 +16,39 @@ public class EspecialidadServiceImpl implements EspecialidadService{
 	EspecialidadRepository especialidadRepository;
 
 	@Override
-	public List<Especialidad> listarTodoEspecialidad() {
+	public Especialidad guardarEspecialidad(Especialidad userEntity) {
+		// TODO Auto-generated method stub
+		return especialidadRepository.save(userEntity) ;
+	}
+
+	@Override
+	public List<Especialidad> listarTodosEspecialidad() {
+		// TODO Auto-generated method stub
 		return especialidadRepository.findAll();
 	}
+
+	@Override
+	public Especialidad actualizarEspecialidad(Especialidad userEntity) {
+		// TODO Auto-generated method stub
+		return especialidadRepository.save(userEntity);
+	}
+
+	@Override
+	public void eliminarEspecialidadById(Integer id) {
+		// TODO Auto-generated method stub
+		
+		especialidadRepository.deleteById(id);
+		
+	}
+
+	@Override
+	public Especialidad buscarEspecialidadById(Integer id) {
+		// TODO Auto-generated method stub
+		return especialidadRepository.findById(id).get();
+	}
+
+
+
+	
+	
 }

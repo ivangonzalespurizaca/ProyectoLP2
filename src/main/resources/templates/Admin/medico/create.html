@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Admin/adminLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Médico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-light">
+<section layout:fragment="contenido">
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-success text-white text-center">
+            <h4><i class="bi bi-person-plus"></i> Registrar Médico</h4>
+        </div>
+
+        <div class="card-body">
+            <form th:action="@{/admin/medico}" th:object="${medico}" method="post">
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nombres:</label>
+                        <input type="text" class="form-control" th:field="*{nombres}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Apellidos:</label>
+                        <input type="text" class="form-control" th:field="*{apellidos}" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">DNI:</label>
+                        <input type="text" class="form-control" th:field="*{dni}" 
+                               required maxlength="8" pattern="[0-9]{8}" inputmode="numeric"
+                               title="Ingrese exactamente 8 dígitos numéricos">
+                    </div>
+             
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">N° Colegiatura:</label>
+                        <input type="text" class="form-control" th:field="*{nroColegiatura}" required>
+                    </div>
+                     <div class="col-md-4">
+                        <label class="form-label fw-bold">Teléfono:</label>
+                        <input type="text" class="form-control" th:field="*{telefono}" 
+                               maxlength="9" pattern="[0-9]{7,9}" inputmode="numeric"
+                               title="Ingrese un número de teléfono válido (hasta 9 dígitos)">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Especialidad:</label>
+                    <select class="form-select" th:field="*{especialidad}" required>
+                        <option value="" disabled selected>-- Seleccione --</option>
+                        <option th:each="esp : ${especialidadList}" 
+                                th:value="${esp.idEspecialidad}" 
+                                th:text="${esp.nombreEspecialidad}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <a th:href="@{/admin/medico/listar}" class="btn btn-secondary px-4 ms-2">
+                        <i class="bi bi-arrow-left-circle"></i> Volver
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</section>
+</body>
+</html>
