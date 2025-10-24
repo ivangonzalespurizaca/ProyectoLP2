@@ -1,15 +1,11 @@
 package com.example.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.entity.Usuario;
 import com.example.service.UsuarioService;
@@ -68,42 +64,18 @@ public class UsuarioController {
 
     // 🔹 Procesar formulario de registro
     @PostMapping("/admin/registro")
-    public String registrarUsuario(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttrs) {
+    public String registrarUsuario(@ModelAttribute Usuario usuario, Model model) {
         usuarioService.registrarUsuario(usuario);
-        redirectAttrs.addFlashAttribute("mensaje", "Usuario registrado con éxito.");
-        return "redirect:/usuarios/admin/home"; // redirige al formulario de registro
+        model.addAttribute("mensaje", "Usuario registrado con éxito.");
+        return "redirect:/usuarios/login";
     }
 
-    @GetMapping("/admin/editar")
-    public String buscarYMostrar(@RequestParam(required = false) String nombreBusqueda, Model model) {
-        if (nombreBusqueda != null && !nombreBusqueda.isEmpty()) {
-            try {
-                Usuario usuario = usuarioService.buscarPorNombre(nombreBusqueda);
-                model.addAttribute("usuario", usuario);
-            } catch (RuntimeException e) {
-                model.addAttribute("error", "Usuario no encontrado");
-            }
-        }
-        return "Admin/editar";
-    }
-
-
-
-    @PostMapping("/admin/actualizar")
-    public String actualizarUsuario(@ModelAttribute Usuario usuario,
-                                    @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-                                    RedirectAttributes redirectAttributes) {
-        
-        Usuario usuarioActual = usuarioService.buscarPorNombre(user.getUsername());
-        
-        usuarioService.actualizarUsuario(usuario, usuarioActual);
-        redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado con éxito.");
-        return "redirect:/usuarios/admin/home";
-    }
-
-
-
-
+    // 🔹 Mostrar lista de usuarios (si lo necesitas)
+//    @GetMapping("/listar")
+//    public String listarUsuarios(Model model) {
+//        model.addAttribute("usuarios", usuarioService.listarUsuarios());
+//        return "usuarios"; // Vista usuarios.html
+//    }
     
 
 
