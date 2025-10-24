@@ -3,7 +3,7 @@
 layout:decorate="~{Admin/adminLayout}">
 <head>
     <title>Admin</title>
-
+	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 	<section layout:fragment="contenido">
@@ -12,18 +12,20 @@ layout:decorate="~{Admin/adminLayout}">
 		<h2>Bienvenido Administrador</h2>
 		<p>Solo accesible por usuarios con rol ADMIN.</p>
 
-		<form th:action="@{/usuarios/logout}" method="post">
-		    <button type="submit">Cerrar sesión</button>
-		</form>
-
 		<hr>
 
-		<h3>Reportes</h3>
-		<!-- Botón para generar el reporte -->
-		<form th:action="@{/ProductosReport}" method="get" target="_blank">
-		    <button type="submit">Generar Reporte de Productos</button>
-		</form>
-		
+		  <!-- SweetAlert -->
+    <div th:if="${mensaje}">
+    <script th:inline="javascript">
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: /*[[${mensaje}]]*/ '',
+            confirmButtonText: 'OK'
+        });
+    </script>
+</div>
+    
 		
 		
 		
