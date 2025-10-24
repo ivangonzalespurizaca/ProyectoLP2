@@ -30,10 +30,16 @@ public class HorarioServiceImpl implements HorarioService{
 		horarioRepository.deleteById(idHorario);
 		
 	}
+	
 
 	@Override
 	public Horario registrarHorario(Horario horario) {
 
 		return horarioRepository.save(horario);
+	}
+
+	@Override
+	public List<Horario> obtenerHorariosPorMedico(Integer idMedico) {
+		return horarioRepository.findByMedico(idMedico);
 	}
 }

@@ -125,7 +125,7 @@
 					  <label>Hora Entrada</label>
 					  <select th:field="*{horarioEntrada}" class="form-select">
 					    <option value="">Seleccionar hora</option>
-					    <option th:each="h : ${#numbers.sequence(0,23)}"
+					    <option th:each="h : ${#numbers.sequence(8,22))}"
 					            th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
 					            th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}"></option>
 					  </select>
