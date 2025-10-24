@@ -117,3 +117,26 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+
+CREATE OR REPLACE VIEW Vista_Citas_Detalle AS
+SELECT 
+    c.ID_Cita,
+    c.Fecha As Fecha,
+    c.Motivo,
+    c.Estado,
+    
+    -- Médico (nombre completo)
+    CONCAT(m.Apellidos, ' ', m.Nombres) AS Medico,
+    e.Nombre AS Especialidad,
+    
+    -- Paciente (nombre completo)
+    CONCAT(p.Apellidos, ' ', p.Nombres) AS Paciente,
+    p.DNI AS DNI_Paciente
+    
+FROM Cita c
+INNER JOIN Medico m ON c.ID_Medico = m.ID_Medico
+INNER JOIN Especialidad e ON m.Especialidad_ID = e.ID
+INNER JOIN Paciente p ON c.ID_Paciente = p.ID_Paciente
+ORDER BY c.Fecha DESC;
