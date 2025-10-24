@@ -36,4 +36,9 @@ public class HorarioServiceImpl implements HorarioService{
 
 		return horarioRepository.save(horario);
 	}
+
+	@Override
+	public List<Horario> obtenerHorariosPorMedico(Integer idMedico) {
+		return horarioRepository.findByMedico(idMedico);
+	}
 }

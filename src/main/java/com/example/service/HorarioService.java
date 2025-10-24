@@ -14,4 +14,6 @@ public interface HorarioService {
 	
 	public void eliminarHorarioPorId(Integer idHorario);
 	
+	public List<Horario> obtenerHorariosPorMedico(Integer idMedico);
+	
 }

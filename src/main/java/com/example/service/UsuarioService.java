@@ -23,4 +23,8 @@ public class UsuarioService {
         usuario.setContrasenia(hash);
         return usuarioRepository.save(usuario);
     }
+    
+    public Usuario buscarPorUserName(String username) {
+    	return usuarioRepository.findByUsername(username);
+    }
 }

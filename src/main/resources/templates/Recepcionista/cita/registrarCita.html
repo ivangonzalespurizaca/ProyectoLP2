@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Recepcionista/recepcionistaLayout}">
+
+<head>
+    <title>Registrar Cita</title>
+</head>
+
+<body>
+
+<main class="container mt-4" layout:fragment="contenido">
+    <h2>Registrar Nueva Cita</h2>
+    <form th:action="@{/recepcionista/cita/guardar}" method="post">
+        <!-- Paciente -->
+        <div class="mb-3">
+            <label for="pacienteNombre" class="form-label">Paciente</label>
+            <div class="input-group">
+                <input type="text" id="pacienteNombre" class="form-control" placeholder="Selecciona un paciente" readonly
+                       data-bs-toggle="modal" data-bs-target="#modalPacientes">
+                <input type="hidden" id="pacienteId" name="paciente.idPaciente">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPacientes">Buscar</button>
+            </div>
+        </div>
+		
+		<div class="mt-2">
+		    <a th:href="@{/recepcionista/paciente/new}"
+		       class="btn btn-outline-success btn-sm">
+		        + Registrar nuevo paciente
+		    </a>
+		</div>
+
+        <!-- Médico -->
+        <div class="mb-3">
+            <label for="medicoNombre" class="form-label">Médico</label>
+            <div class="input-group">
+                <input type="text" id="medicoNombre" class="form-control" placeholder="Selecciona un médico" readonly
+                       data-bs-toggle="modal" data-bs-target="#modalMedicos">
+                <input type="hidden" id="medicoId" name="medico.idMedico">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalMedicos">Buscar</button>
+            </div>
+        </div>
+
+		<div class="mb-3">
+		    <label for="fechaCita" class="form-label">Fecha</label>
+		    <input type="date" id="fechaCita" name="fecha" class="form-control" required>
+		</div>
+
+		<!-- Hora -->
+		<div class="mb-3">
+		    <label>Hora</label>
+		    <select name="hora" class="form-select" required>
+		        <option value="">Seleccionar hora</option>
+		        <option th:each="h : ${#numbers.sequence(8,22)}"
+		                th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
+		                th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}">
+		        </option>
+		    </select>
+		    <button type="button" class="btn btn-info mt-2" 
+		            onclick="mostrarHorarios(document.getElementById('medicoId').value, document.getElementById('fechaCita').value)">
+		        Ver horarios
+		    </button>
+		</div>
+
+		<!-- Contenedor donde se cargará el modal -->
+		<div id="modalHorariosContainer"></div>
+
+
+
+        <!-- Motivo -->
+        <div class="mb-3">
+            <label for="motivo" class="form-label">Motivo</label>
+            <textarea id="motivo" name="motivo" class="form-control" rows="3"></textarea>
+        </div>
+		
+
+
+        <button type="submit" class="btn btn-success">Registrar Cita</button>
+    </form>
+
+    <!-- Modales de búsqueda (pacientes y médicos) -->
+    <div th:replace="Recepcionista/cita/modalSeleccionarPaciente :: modalPacientes"></div>
+    <div th:replace="Recepcionista/cita/modalSeleccionarMedico :: modalMedicos"></div>
+</main>
+
+<th:block layout:fragment="scripts">
+	<script th:src="@{/js/citas.js}"></script>
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script th:inline="javascript">
+		let success = /*[[${success}]]*/ null;
+		let error = /*[[${error}]]*/ null;
+		let abrirModal = /*[[${abrirModal}]]*/ false;
+		
+		if (success) Swal.fire("Éxito", success, "success");
+		if (error) Swal.fire("Error", error, "error");
+
+	</script>
+</th:block>
+
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Recepcionista/recepcionistaLayout}">
+
+<head>
+    <title>Editar Cita</title>
+</head>
+
+<body>
+<main class="container mt-4" layout:fragment="contenido">
+    <h2>Editar Cita</h2>
+
+    <form th:action="@{/recepcionista/cita/actualizar}" th:object="${cita}" method="post">
+        <input type="hidden" th:field="*{idCita}" />
+		
+		<input type="hidden" id="pacienteId" th:value="*{paciente.idPaciente}">
+		<input type="hidden" id="medicoId" th:value="*{medico.idMedico}">
+		
+        <!-- Paciente (solo lectura) -->
+        <div class="mb-3">
+            <label class="form-label">Paciente</label>
+            <input type="text" class="form-control" readonly
+                   th:value="*{paciente.nombre + ' ' + paciente.apellido}">
+        </div>
+
+        <!-- Médico (solo lectura) -->
+        <div class="mb-3">
+            <label class="form-label">Médico</label>
+            <input type="text" class="form-control" readonly
+                   th:value="*{medico.nombres + ' ' + medico.apellidos + ' - ' + medico.especialidad.nombreEspecialidad}">
+        </div>
+
+		<!-- Motivo -->
+		<div class="mb-3">
+		    <label class="form-label">Motivo</label>
+		    <textarea class="form-control" rows="3" th:field="*{motivo}"></textarea>
+		</div>
+
+
+        <!-- Fecha -->
+		<div class="mb-3">
+		    <label for="fechaCita" class="form-label">Fecha</label>
+			<input type="date"
+				id="fechaCita"
+			       class="form-control"
+			       th:value="${#temporals.format(cita.fecha, 'yyyy-MM-dd')}"
+			       name="fecha">
+		</div>
+		
+		<input type="hidden" id="pacienteId" th:field="*{paciente.idPaciente}">
+		<input type="hidden" id="medicoId" th:field="*{medico.idMedico}">
+		
+
+
+        <!-- Hora -->
+        <div class="mb-3">
+            <label class="form-label">Hora</label>
+            <select th:field="*{hora}" class="form-select" required>
+                <option value="">Seleccionar hora</option>
+                <option th:each="h : ${#numbers.sequence(8,22)}"
+                        th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
+                        th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}"
+                        th:selected="${#temporals.format(cita.hora, 'HH:mm') == (h < 10 ? '0' + h + ':00' : h + ':00')}">
+                </option>
+            </select>
+            <button type="button" class="btn btn-info mt-2"
+			onclick="mostrarHorarios(document.getElementById('medicoId').value, document.getElementById('fechaCita').value)">
+                Ver horarios
+            </button>
+        </div>
+
+        <!-- Contenedor para modal dinámico -->
+        <div id="modalHorariosContainer"></div>
+
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+        <a th:href="@{/recepcionista/cita/listar}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</main>
+
+<th:block layout:fragment="scripts">
+    <script th:src="@{/js/citas.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script th:inline="javascript">
+        let success = /*[[${success}]]*/ null;
+        let error = /*[[${error}]]*/ null;
+
+        if (success) Swal.fire("Éxito", success, "success");
+        if (error) Swal.fire("Error", error, "error");
+    </script>
+	
+</th:block>
+</body>
+</html>
