@@ -10,7 +10,7 @@ public enum DiaSemana {
     VIERNES,
     SABADO,
     DOMINGO;
-    
+
     public static DiaSemana fromLocalDate(LocalDate fecha) {
         switch (fecha.getDayOfWeek()) {
             case MONDAY: return LUNES;

@@ -22,4 +22,5 @@ public interface PacienteService {
 	public Paciente buscarPacienteById(Integer id);
 	
 	public List<Paciente> buscarPacientePorNombre(String nombre);
+
 }

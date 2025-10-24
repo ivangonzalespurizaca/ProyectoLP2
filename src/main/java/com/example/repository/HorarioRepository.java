@@ -13,9 +13,7 @@ import com.example.entity.enums.DiaSemana;
 
 @Repository
 public interface HorarioRepository extends JpaRepository<Horario, Integer> {
-    
-    List<Horario> findByMedico_idMedico(Integer idMedico);
-
+	List<Horario> findByMedico_idMedico(Integer idMedico);
     List<Horario> findByMedicoAndDiaSemana(Medico medico, DiaSemana diaSemana);
     
     @Query("SELECT h FROM Horario h WHERE h.medico.idMedico = :idMedico")

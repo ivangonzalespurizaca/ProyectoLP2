@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+ocument.addEventListener('DOMContentLoaded', () => {
 
     // --- Selección de paciente ---
     document.addEventListener('click', (e) => {

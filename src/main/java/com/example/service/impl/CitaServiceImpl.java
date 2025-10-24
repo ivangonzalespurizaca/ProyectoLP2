@@ -101,6 +101,6 @@ public class CitaServiceImpl implements CitaService {
 	@Override
 	public void eliminar(Integer idCita) {
 		citaRepository.deleteById(idCita);
-		
+
 	}
 }

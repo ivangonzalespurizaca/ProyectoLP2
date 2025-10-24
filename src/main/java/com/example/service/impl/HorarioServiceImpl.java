@@ -30,6 +30,7 @@ public class HorarioServiceImpl implements HorarioService{
 		horarioRepository.deleteById(idHorario);
 		
 	}
+	
 
 	@Override
 	public Horario registrarHorario(Horario horario) {

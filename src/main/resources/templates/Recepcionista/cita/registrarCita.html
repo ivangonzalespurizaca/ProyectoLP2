@@ -22,7 +22,7 @@
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPacientes">Buscar</button>
             </div>
         </div>
-		
+
 		<div class="mt-2">
 		    <a th:href="@{/recepcionista/paciente/new}"
 		       class="btn btn-outline-success btn-sm">
@@ -72,7 +72,7 @@
             <label for="motivo" class="form-label">Motivo</label>
             <textarea id="motivo" name="motivo" class="form-control" rows="3"></textarea>
         </div>
-		
+
 
 
         <button type="submit" class="btn btn-success">Registrar Cita</button>
@@ -85,13 +85,13 @@
 
 <th:block layout:fragment="scripts">
 	<script th:src="@{/js/citas.js}"></script>
-	
+
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script th:inline="javascript">
 		let success = /*[[${success}]]*/ null;
 		let error = /*[[${error}]]*/ null;
 		let abrirModal = /*[[${abrirModal}]]*/ false;
-		
+
 		if (success) Swal.fire("Éxito", success, "success");
 		if (error) Swal.fire("Error", error, "error");
 

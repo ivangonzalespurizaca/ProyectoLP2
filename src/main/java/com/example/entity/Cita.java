@@ -46,7 +46,7 @@ public class Cita implements Serializable{
 
     @Column(name = "Fecha", nullable = false)
     private LocalDate fecha;
-    
+
     @Column(name = "Hora", nullable = false)
     private LocalTime hora;
 

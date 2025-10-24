@@ -32,19 +32,19 @@ import com.example.service.UsuarioService;
 public class CitasController {
 	@Autowired
 	private CitaService citaService;
-	
+
 	@Autowired 
 	private PacienteService pacienteService;
-	
+
 	@Autowired
 	private MedicoService medicoService;
-	
+
 	@Autowired 
 	private HorarioService horarioService;
-	
+
 	@Autowired 
 	private UsuarioService usuarioService;
-	
+
 
 	@GetMapping({"/listar"})
 	public String listaCitas(Model model, @RequestParam(required = false) String texto) {
@@ -56,13 +56,19 @@ public class CitasController {
 	    model.addAttribute("texto", texto); 
 	    return "Recepcionista/cita/listaDeCitas";
 	}
-	
+
 	@GetMapping("/registrar")
 	public String nuevoCita(Model model) {
 	    model.addAttribute("cita", new Cita());
+	    
+	    // Agregar listas para los modales
+	    model.addAttribute("medicos", medicoService.listarTodosMedicos());
+	    model.addAttribute("pacientes", pacienteService.listarTodosPaciente());
+	    
 	    return "Recepcionista/cita/registrarCita"; 
 	}
-	
+
+
 	@PostMapping("/guardar")
 	public String guardarCita(Cita cita, Authentication auth, Model model, RedirectAttributes redirectAttrs) {
 	    try {
@@ -76,13 +82,13 @@ public class CitasController {
 	        // ✅ Mensaje de éxito -> se muestra en la página LISTAR (porque hay redirect)
 	        redirectAttrs.addFlashAttribute("success", "Cita registrada correctamente!");
 	        return "redirect:/recepcionista/cita/listar";
-	        
+
 	    } catch (IllegalArgumentException | IllegalStateException e) {
 	        // Mensaje de error, sin salir de la página
 	        model.addAttribute("error", e.getMessage());
 	        model.addAttribute("cita", cita); // mantener datos del formulario
 	        return "Recepcionista/cita/registrarCita"; // tu vista actual
-	        
+
 	    } catch (Exception e) {
 	        model.addAttribute("error", "Ocurrió un error al registrar la cita.");
 	        model.addAttribute("cita", cita);
@@ -106,12 +112,12 @@ public class CitasController {
 	@ResponseBody
 	public List<Medico> buscarMedicos(@RequestParam(required = false) String texto) {
 	    if (texto == null || texto.isEmpty()) {
-	        return medicoService.listarTodoMedico();
+	        return medicoService.listarTodosMedicos();
 	    } else {
 	        return medicoService.buscarMedicoPorNombre(texto);
 	    }
 	}
-	
+
 	@GetMapping("/horarios")
 	public String verHorarios(@RequestParam Integer idMedico,
 	                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
@@ -126,17 +132,17 @@ public class CitasController {
 	    model.addAttribute("horarios", horarios);
 	    model.addAttribute("ocupadas", ocupadas);
 	    model.addAttribute("fecha", fecha);
-	    
+
 	    return "Recepcionista/cita/modalHorarios :: contenido";
 	}
-    
+
 	@GetMapping("/editar/{id}")
 	public String editarCita(@PathVariable Integer id, Model model) {
 	    Cita cita = citaService.buscarCitaPorId(id);
 	    model.addAttribute("cita", cita);
 	    return "Recepcionista/cita/editarCita";
 	}
-	
+
 	@PostMapping("/actualizar")
 	public String actualizarCita(Cita cita, RedirectAttributes redirectAttributes, Authentication auth,Model model) {
 	    try {

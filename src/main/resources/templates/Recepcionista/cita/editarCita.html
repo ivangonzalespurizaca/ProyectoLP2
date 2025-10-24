@@ -13,10 +13,10 @@
 
     <form th:action="@{/recepcionista/cita/actualizar}" th:object="${cita}" method="post">
         <input type="hidden" th:field="*{idCita}" />
-		
+
 		<input type="hidden" id="pacienteId" th:value="*{paciente.idPaciente}">
 		<input type="hidden" id="medicoId" th:value="*{medico.idMedico}">
-		
+
         <!-- Paciente (solo lectura) -->
         <div class="mb-3">
             <label class="form-label">Paciente</label>
@@ -47,10 +47,10 @@
 			       th:value="${#temporals.format(cita.fecha, 'yyyy-MM-dd')}"
 			       name="fecha">
 		</div>
-		
+
 		<input type="hidden" id="pacienteId" th:field="*{paciente.idPaciente}">
 		<input type="hidden" id="medicoId" th:field="*{medico.idMedico}">
-		
+
 
 
         <!-- Hora -->
@@ -89,7 +89,7 @@
         if (success) Swal.fire("Éxito", success, "success");
         if (error) Swal.fire("Error", error, "error");
     </script>
-	
+
 </th:block>
 </body>
 </html>
