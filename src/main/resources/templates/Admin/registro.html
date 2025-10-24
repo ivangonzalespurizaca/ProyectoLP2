@@ -6,80 +6,79 @@
 <!-- 🎨 Fragmento de estilos personalizados -->
 <section layout:fragment="estilos">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-        }
+     
+    body {
+        background-color: #e8f4fc; /* celeste claro */
+        font-family: 'Orbitron', sans-serif;
+    }
 
-        .card {
-            border: none;
-            border-radius: 20px;
-            background: #ffffff;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
+    .card {
+        border: none;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
 
-        .card:hover {
-            transform: translateY(-3px);
-        }
+    .card:hover {
+        transform: translateY(-3px);
+    }
 
-        .form-label {
-            font-weight: 600;
-            color: #0d1b2a;
-        }
+    h3 {
+        color: #007BFF;
+        font-weight: 700;
+    }
 
-        .text-primary {
-            color: #007bff !important;
-        }
+    .form-label {
+        font-weight: 600;
+        color: #007BFF;
+    }
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            transition: all 0.3s ease;
-        }
+    /* Inputs y selects con fuente normal */
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 1px solid #bcd0f0;
+        background-color: #f9fbff;
+        font-family: sans-serif; /* ← aquí */
+    }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
+    .form-control:focus, .form-select:focus {
+        border-color: #007BFF;
+        box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+    }
 
-        input::placeholder {
-            color: #6c757d;
-        }
+    .btn-gradient {
+        background: linear-gradient(to right, #007BFF, #5bc0de);
+        color: #fff;
+        border: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
 
-        .form-control, .form-select {
-            border-radius: 10px;
-            border: 1px solid #bcd0f0;
-            background-color: #f9fbff;
-        }
+    .btn-gradient:hover {
+        background: linear-gradient(to right, #0056b3, #31b0d5);
+        transform: translateY(-2px);
+    }
 
-        .form-control:focus, .form-select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
-        }
+    .btn-secondary {
+        border-radius: 10px;
+    }
 
-        .login-link {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .login-link a {
-            color: #007bff;
-            font-weight: 600;
-            text-decoration: none;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    .alert {
+        border-radius: 15px;
+    }
+</style>
+        
 </section>
 
 <!-- 📋 Contenido principal -->
 <section layout:fragment="contenido">
     <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
         <div class="card p-5 w-100" style="max-width: 750px;">
-            <h3 class="text-center text-primary mb-4 fw-bold">Registro de Usuario</h3>
+            <h3 class="text-center mb-4">Registro de Usuario</h3>
 
             <form th:action="@{/usuarios/admin/registro}" method="post" th:object="${usuario}" class="row g-3">
 
@@ -129,17 +128,35 @@
                 </div>
 
                 <div class="col-12 mt-4">
-                    <button type="submit" class="btn btn-primary w-100 py-2 fs-5">Registrar</button>
+                    <button type="submit" class="btn btn-gradient w-100 py-2 fs-5">Registrar</button>
                 </div>
 
                 <div class="col-12 mt-3">
                     <a th:href="@{/usuarios/admin/home}" class="btn btn-secondary w-100 py-2 fs-5">Regresar</a>
                 </div>
+
+                <div class="col-12 mt-3">
+                    <a th:href="@{/usuarios/admin/editar}" 
+                       class="btn btn-gradient w-100 py-2 fs-5 text-white">
+                       Modificar
+                    </a>
+                </div>
+
             </form>
 
             <div th:if="${mensaje}" class="alert alert-success text-center mt-4" th:text="${mensaje}"></div>
         </div>
     </div>
 </section>
+<script th:inline="javascript" th:if="${mensaje}">
+    Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: /*[[${mensaje}]]*/'',
+        confirmButtonColor: '#007BFF'
+    });
+</script>
+
+
 
 </html>

@@ -103,8 +103,10 @@
             <!-- Usuario derecha -->
             <div class="d-flex align-items-center ms-auto">
                 <div class="user-info">
-                    <img th:src="${usuarioActual.imgPerfil != null} ? @{/images/{file}(file=${usuarioActual.imgPerfil})} : @{/images/default-user.jpg}" 
-                         alt="Usuario">
+                    <img th:if="${usuarioActual != null}" 
+     th:src="${usuarioActual.imgPerfil != null} ? @{/images/{file}(file=${usuarioActual.imgPerfil})} : @{/images/default-user.jpg}" 
+     alt="Usuario">
+                    
                     <div class="text-end">
                         <strong th:text="${usuarioActual.nombres}">Nombre Usuario</strong> | 
                         <small th:text="${usuarioActual.rol}">ROL</small>
