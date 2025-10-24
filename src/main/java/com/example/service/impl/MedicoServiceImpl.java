@@ -14,22 +14,46 @@ public class MedicoServiceImpl implements MedicoService{
 
 	@Autowired
 	MedicoRepository medicoRepository;
-	
+
 	@Override
-	public List<Medico> listarTodoMedico() {
+	public List<Medico> listarTodosMedicos() {
+		// TODO Auto-generated method stub
 		return medicoRepository.findAll();
 	}
 
 	@Override
-    public List<Medico> buscarMedicoPorNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            return listarTodoMedico();
-        }
-        return medicoRepository.findByNombresStartingWithIgnoreCase(nombre);
-    }
+	public Medico guardarMedico(Medico userEntity) {
+		// TODO Auto-generated method stub
+		return medicoRepository.save(userEntity);
+	}
+
+	@Override
+	public Medico actualizarMedico(Medico userEntity) {
+		// TODO Auto-generated method stub
+		return medicoRepository.save(userEntity);
+	}
+
+	@Override
+	public void eliminarMedicoById(Integer id) {
+		// TODO Auto-generated method stub
+		medicoRepository.deleteById(id);
+	}
+
+	@Override
+	public List<Medico> buscarMedicoPorNombre(String nombre) {
+		// TODO Auto-generated method stub
+		return medicoRepository.findByNombresStartingWithIgnoreCase(nombre);
+	}
 
 	@Override
 	public Medico buscarMedicoPorId(Integer id) {
+		// TODO Auto-generated method stub
 		return medicoRepository.findById(id).get();
 	}
+
+
+
+
+	
+
 }
