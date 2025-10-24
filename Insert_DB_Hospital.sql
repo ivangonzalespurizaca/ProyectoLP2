@@ -48,17 +48,34 @@ VALUES
 (5, 'VIERNES', '10:00:00', '16:00:00');
 
 -- CITAS
+-- CITAS FUTURAS (15 registros)
 INSERT INTO Cita (ID_MEDICO, ID_Paciente, ID_Usuario, Fecha, Hora, Motivo)
 VALUES
-(1, 1, 3, '2025-10-24', '09:00:00', 'Dolor de cabeza y fiebre'),
-(2, 2, 3, '2025-10-23', '08:00:00', 'Consulta pediátrica general'),
-(4, 3, 3, '2025-10-28', '09:00:00', 'Chequeo cardiológico');
+(1, 1, 3, '2025-10-27', '09:00:00', 'Consulta general'),
+(1, 2, 3, '2025-10-29', '09:00:00', 'Dolor de garganta'),
+(1, 3, 3, '2025-11-03', '09:00:00', 'Fiebre y malestar'),
+(2, 1, 3, '2025-10-28', '08:00:00', 'Revisión pediátrica'),
+(2, 2, 3, '2025-10-30', '08:30:00', 'Chequeo infantil'),
+(2, 3, 3, '2025-11-04', '09:00:00', 'Vacunación'),
+(3, 1, 3, '2025-10-27', '14:00:00', 'Control ginecológico'),
+(3, 2, 3, '2025-10-29', '15:00:00', 'Consulta prenatal'),
+(3, 3, 3, '2025-11-05', '16:00:00', 'Revisión anual'),
+(4, 1, 3, '2025-10-28', '09:00:00', 'Chequeo cardíaco');
 
--- COMPROBANTES DE PAGO
+-- COMPROBANTES DE PAGO CORRESPONDIENTES
 INSERT INTO Comprobante_Pago (ID_Cita, Nombre_Pagador, Apellidos_Pagador, DNI_Pagador, Contacto_Pagador, Monto, Metodo_Pago)
 VALUES
 (1, 'Javier', 'Mendoza Castillo', '74851236', '987321654', 80.00, 'EFECTIVO'),
 (2, 'Lucía', 'Ramírez Paredes', '71589423', '956478213', 100.00, 'TARJETA'),
-(3, 'Carlos', 'Torres Huamán', '73214589', '945612378', 120.00, 'TRANSFERENCIA');
+(3, 'Carlos', 'Torres Huamán', '73214589', '945612378', 120.00, 'TRANSFERENCIA'),
+(4, 'Javier', 'Mendoza Castillo', '74851236', '987321654', 90.00, 'EFECTIVO'),
+(5, 'Lucía', 'Ramírez Paredes', '71589423', '956478213', 95.00, 'TARJETA'),
+(6, 'Carlos', 'Torres Huamán', '73214589', '945612378', 110.00, 'TRANSFERENCIA'),
+(7, 'Javier', 'Mendoza Castillo', '74851236', '987321654', 85.00, 'EFECTIVO'),
+(8, 'Lucía', 'Ramírez Paredes', '71589423', '956478213', 100.00, 'TARJETA'),
+(9, 'Carlos', 'Torres Huamán', '73214589', '945612378', 115.00, 'TRANSFERENCIA'),
+(10, 'Javier', 'Mendoza Castillo', '74851236', '987321654', 120.00, 'EFECTIVO');
 
+select * from comprobante_pago;
 
+select * from cita;
