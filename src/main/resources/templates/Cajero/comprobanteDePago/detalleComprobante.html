@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Cajero/cajeroLayout}">
+<head>
+    <title>Detalle Comprobante de Pago</title>
+</head>
+<body>
+
+<main class="container mt-4" layout:fragment="contenido">
+
+    <h2 class="mb-4">Detalle del Comprobante de Pago</h2>
+
+    <div class="card p-3 mb-3">
+        <h5>Información del Comprobante</h5>
+        <p><strong>ID:</strong> <span th:text="${comprobante.idComprobante}"></span></p>
+        <p><strong>Estado:</strong> <span th:text="${comprobante.estado}"></span></p>
+        <p><strong>Fecha de Emisión:</strong> <span th:text="${#temporals.format(comprobante.fechaEmision,'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Monto:</strong> S/ <span th:text="${#numbers.formatDecimal(comprobante.monto,1,2)}"></span></p>
+        <p><strong>Método de Pago:</strong> <span th:text="${comprobante.metodoPago}"></span></p>
+    </div>
+
+    <div class="card p-3 mb-3">
+        <h5>Datos del Pagador</h5>
+        <p><strong>Nombre:</strong> <span th:text="${comprobante.nombrePagador + ' ' + comprobante.apellidosPagador}"></span></p>
+        <p><strong>DNI:</strong> <span th:text="${comprobante.dniPagador}"></span></p>
+        <p><strong>Contacto:</strong> <span th:text="${comprobante.contactoPagador}"></span></p>
+    </div>
+
+    <div class="card p-3 mb-3">
+        <h5>Datos de la Cita</h5>
+        <p><strong>Paciente:</strong> <span th:text="${comprobante.cita.paciente.nombre + ' ' + comprobante.cita.paciente.apellido}"></span></p>
+        <p><strong>Médico:</strong> <span th:text="${comprobante.cita.medico.nombres + ' ' + comprobante.cita.medico.apellidos}"></span></p>
+        <p><strong>Fecha:</strong> <span th:text="${#temporals.format(comprobante.cita.fecha,'dd/MM/yyyy')}"></span></p>
+        <p><strong>Hora:</strong> <span th:text="${comprobante.cita.hora}"></span></p>
+        <p><strong>Motivo:</strong> <span th:text="${comprobante.cita.motivo}"></span></p>
+        <p><strong>Registrado por:</strong> <span th:text="${comprobante.cita.usuario.nombres + ' ' + comprobante.cita.usuario.apellidos}"></span></p>
+    </div>
+
+    <a th:href="@{/cajero/comprobanteDePago/listar}" class="btn btn-secondary mt-3">Volver</a>
+
+</main>
+
+</body>
+</html>

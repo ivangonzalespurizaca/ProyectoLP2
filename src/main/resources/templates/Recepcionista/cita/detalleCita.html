@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Recepcionista/recepcionistaLayout}">
+
+<head>
+    <title>Detalle de Cita</title>
+</head>
+
+<body>
+
+<main class="container mt-4" layout:fragment="contenido">
+
+    <h2 class="mb-4">Detalle de Cita</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <!-- Paciente -->
+            <p><strong>Paciente:</strong> <span th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellido}"></span></p>
+
+            <!-- DNI del paciente -->
+            <p><strong>DNI:</strong> <span th:text="${cita.paciente.dni}"></span></p>
+
+            <!-- Fecha y hora -->
+            <p><strong>Fecha:</strong> <span th:text="${#temporals.format(cita.fecha, 'dd/MM/yyyy')}"></span></p>
+            <p><strong>Hora:</strong> <span th:text="${#temporals.format(cita.hora, 'HH:mm')}"></span></p>
+
+            <!-- Médico -->
+            <p><strong>Médico:</strong> <span th:text="${cita.medico.nombres + ' ' + cita.medico.apellidos}"></span></p>
+
+            <!-- Especialidad del médico -->
+            <p><strong>Especialidad:</strong> <span th:text="${cita.medico.especialidad != null ? cita.medico.especialidad.nombreEspecialidad : 'N/A'}"></span></p>
+
+            <!-- Motivo -->
+            <p><strong>Motivo:</strong> <span th:text="${cita.motivo}"></span></p>
+
+            <!-- Estado -->
+            <p><strong>Estado:</strong> 
+                <span th:text="${cita.estado}" 
+                      th:classappend="${cita.estado.name == 'PAGADO'} ? 'badge bg-success' :
+                                      (cita.estado.name == 'PENDIENTE' ? 'badge bg-warning text-dark' :
+                                      'badge bg-secondary')"></span>
+            </p>
+
+            <!-- Usuario que registró -->
+            <p><strong>Registrado por:</strong> <span th:text="${cita.usuario.nombres + ' ' + cita.usuario.apellidos}"></span></p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a th:href="@{/recepcionista/cita/listar}" class="btn btn-secondary">Volver a la lista</a>
+    </div>
+
+</main>
+
+</body>
+</html>

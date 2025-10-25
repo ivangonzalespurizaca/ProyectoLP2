@@ -2,5 +2,8 @@ package com.example.entity.enums;
 
 public enum EstadoCita {
     PENDIENTE,
-    PAGADO
+    PAGADO,
+    CANCELADO,
+    VENCIDO,
+    ATENDIDO
 }
