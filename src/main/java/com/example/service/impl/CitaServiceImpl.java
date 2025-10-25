@@ -15,6 +15,8 @@ import com.example.repository.CitaRepository;
 import com.example.repository.HorarioRepository;
 import com.example.service.CitaService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CitaServiceImpl implements CitaService {
 
@@ -101,6 +103,23 @@ public class CitaServiceImpl implements CitaService {
 	@Override
 	public void eliminar(Integer idCita) {
 		citaRepository.deleteById(idCita);
+		
+	}
 
+	@Override
+	public List<Cita> buscarPendientesPorPaciente(String estado, String dato) {
+		return citaRepository.buscarPorNombreOApellido(dato);
+	}
+
+	@Override
+	public List<Cita> listarPorEstado(EstadoCita estado) {
+		return citaRepository.buscarPorEstado(estado);
+	}
+	
+	@Override
+	@Transactional
+	public void actualizarEstadoCita(Cita cita, EstadoCita nuevoEstado) {
+	    cita.setEstado(nuevoEstado);
+	    citaRepository.save(cita); 
 	}
 }

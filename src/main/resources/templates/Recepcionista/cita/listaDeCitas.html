@@ -54,38 +54,46 @@
                                               'badge bg-secondary')">
                         </span>
                     </td>
-                    <td>
-                        <!-- Botón Editar habilitado solo si NO está pagado -->
-                        <a th:if="${cita.estado.name != 'PAGADO'}"
-                           th:href="@{/recepcionista/cita/editar/{id}(id=${cita.idCita})}"
-                           class="btn btn-warning btn-sm me-1">
-                            Editar
-                        </a>
 
-                        <!-- Botón Editar deshabilitado si está pagado -->
-                        <button th:if="${cita.estado.name == 'PAGADO'}"
-                                class="btn btn-warning btn-sm me-1" disabled>
-                            Editar
-                        </button>
+					<td>
+						<!-- Botón Ver Detalle siempre disponible -->
+						<a th:href="@{/recepcionista/cita/detalle/{id}(id=${cita.idCita})}"
+						   class="btn btn-info btn-sm me-1">
+						    Ver Detalle
+						</a>
+						
+					    <!-- Botón Editar habilitado solo si está PENDIENTE o PAGADO -->
+					    <a th:if="${cita.estado.name == 'PENDIENTE' or cita.estado.name == 'PAGADO'}"
+					       th:href="@{/recepcionista/cita/editar/{id}(id=${cita.idCita})}"
+					       class="btn btn-warning btn-sm me-1">
+					        Editar
+					    </a>
 
-                        <!-- Botón Eliminar habilitado solo si NO está pagado -->
-                        <form th:if="${cita.estado.name != 'PAGADO'}"
-                              th:action="@{/recepcionista/cita/eliminar/{id}(id=${cita.idCita})}"
-                              method="get"
-                              style="display:inline;">
-                            <button type="button"
-                                    class="btn btn-danger btn-sm"
-                                    th:onclick="|confirmarEliminar('${cita.idCita}')|">
-                                Eliminar
-                            </button>
-                        </form>
+					    <!-- Botón Editar deshabilitado si NO está PENDIENTE ni PAGADO -->
+					    <button th:if="${cita.estado.name != 'PENDIENTE' and cita.estado.name != 'PAGADO'}"
+					            class="btn btn-warning btn-sm me-1" disabled>
+					        Editar
+					    </button>
 
-                        <!-- Botón Eliminar deshabilitado si está pagado -->
-                        <button th:if="${cita.estado.name == 'PAGADO'}"
-                                class="btn btn-danger btn-sm" disabled>
-                            Eliminar
-                        </button>
-                    </td>
+					    <!-- Botón Cancelar habilitado solo si está PENDIENTE -->
+					    <form th:if="${cita.estado.name == 'PENDIENTE'}"
+					          th:action="@{/recepcionista/cita/cancelar/{id}(id=${cita.idCita})}"
+					          method="get"
+					          style="display:inline;">
+					        <button type="button"
+					                class="btn btn-danger btn-sm"
+					                th:onclick="|confirmarEliminar('${cita.idCita}')|">
+					            Cancelar
+					        </button>
+					    </form>
+
+					    <!-- Botón Cancelar deshabilitado si NO está PENDIENTE -->
+					    <button th:if="${cita.estado.name != 'PENDIENTE'}"
+					            class="btn btn-danger btn-sm" disabled>
+					        Cancelar
+					    </button>
+					</td>
+
                 </tr>
             </tbody>
         </table>
@@ -94,17 +102,17 @@
 </main>
 
 <th:block layout:fragment="scripts">
-
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script th:inline="javascript">
         let success = /*[[${success}]]*/ null;
         let error = /*[[${error}]]*/ null;
         let abrirModal = /*[[${abrirModal}]]*/ false;
-
+        
         if (success) Swal.fire("Éxito", success, "success");
         if (error) Swal.fire("Error", error, "error");
     </script>
-
+	
 	<script>
 	function confirmarEliminar(id) {
 	    Swal.fire({

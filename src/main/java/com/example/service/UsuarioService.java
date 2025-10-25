@@ -62,11 +62,4 @@ public class UsuarioService {
     public Usuario buscarPorUserName(String username) {
     	return usuarioRepository.findByUsername(username);
     }
-
-
-
-
-    
-    
-    
 }

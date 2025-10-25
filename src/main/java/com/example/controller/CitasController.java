@@ -21,6 +21,7 @@ import com.example.entity.Horario;
 import com.example.entity.Medico;
 import com.example.entity.Paciente;
 import com.example.entity.Usuario;
+import com.example.entity.enums.EstadoCita;
 import com.example.service.CitaService;
 import com.example.service.HorarioService;
 import com.example.service.MedicoService;
@@ -32,19 +33,19 @@ import com.example.service.UsuarioService;
 public class CitasController {
 	@Autowired
 	private CitaService citaService;
-
+	
 	@Autowired 
 	private PacienteService pacienteService;
-
+	
 	@Autowired
 	private MedicoService medicoService;
-
+	
 	@Autowired 
 	private HorarioService horarioService;
-
+	
 	@Autowired 
 	private UsuarioService usuarioService;
-
+	
 
 	@GetMapping({"/listar"})
 	public String listaCitas(Model model, @RequestParam(required = false) String texto) {
@@ -56,19 +57,13 @@ public class CitasController {
 	    model.addAttribute("texto", texto); 
 	    return "Recepcionista/cita/listaDeCitas";
 	}
-
+	
 	@GetMapping("/registrar")
 	public String nuevoCita(Model model) {
 	    model.addAttribute("cita", new Cita());
-	    
-	    // Agregar listas para los modales
-	    model.addAttribute("medicos", medicoService.listarTodosMedicos());
-	    model.addAttribute("pacientes", pacienteService.listarTodosPaciente());
-	    
 	    return "Recepcionista/cita/registrarCita"; 
 	}
-
-
+	
 	@PostMapping("/guardar")
 	public String guardarCita(Cita cita, Authentication auth, Model model, RedirectAttributes redirectAttrs) {
 	    try {
@@ -82,13 +77,13 @@ public class CitasController {
 	        // ✅ Mensaje de éxito -> se muestra en la página LISTAR (porque hay redirect)
 	        redirectAttrs.addFlashAttribute("success", "Cita registrada correctamente!");
 	        return "redirect:/recepcionista/cita/listar";
-
+	        
 	    } catch (IllegalArgumentException | IllegalStateException e) {
 	        // Mensaje de error, sin salir de la página
 	        model.addAttribute("error", e.getMessage());
 	        model.addAttribute("cita", cita); // mantener datos del formulario
 	        return "Recepcionista/cita/registrarCita"; // tu vista actual
-
+	        
 	    } catch (Exception e) {
 	        model.addAttribute("error", "Ocurrió un error al registrar la cita.");
 	        model.addAttribute("cita", cita);
@@ -117,11 +112,10 @@ public class CitasController {
 	        return medicoService.buscarMedicoPorNombre(texto);
 	    }
 	}
-
+	
 	@GetMapping("/horarios")
 	public String verHorarios(@RequestParam Integer idMedico,
-	                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-	                          Model model) {
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha, Model model) {
 
 	    // Horarios regulares
 	    List<Horario> horarios = horarioService.obtenerHorariosPorMedico(idMedico);
@@ -132,17 +126,17 @@ public class CitasController {
 	    model.addAttribute("horarios", horarios);
 	    model.addAttribute("ocupadas", ocupadas);
 	    model.addAttribute("fecha", fecha);
-
+	    
 	    return "Recepcionista/cita/modalHorarios :: contenido";
 	}
-
+    
 	@GetMapping("/editar/{id}")
 	public String editarCita(@PathVariable Integer id, Model model) {
 	    Cita cita = citaService.buscarCitaPorId(id);
 	    model.addAttribute("cita", cita);
 	    return "Recepcionista/cita/editarCita";
 	}
-
+	
 	@PostMapping("/actualizar")
 	public String actualizarCita(Cita cita, RedirectAttributes redirectAttributes, Authentication auth,Model model) {
 	    try {
@@ -151,6 +145,13 @@ public class CitasController {
 	            redirectAttributes.addFlashAttribute("error", "La cita no existe o fue eliminada.");
 	            return "redirect:/recepcionista/cita/listar";
 	        }
+	        
+	        if (citaExistente.getEstado() != EstadoCita.PENDIENTE 
+	                && citaExistente.getEstado() != EstadoCita.PAGADO) {
+	            redirectAttributes.addFlashAttribute("error", "No se puede actualizar una cita que está " + citaExistente.getEstado());
+	            return "redirect:/recepcionista/cita/listar";
+	        }
+	        
 	        Usuario usuarioActual = usuarioService.buscarPorUserName(auth.getName());
 	        citaExistente.setUsuario(usuarioActual);
 
@@ -173,13 +174,31 @@ public class CitasController {
 	    }
 	}
 
-	@GetMapping("/eliminar/{id}")
-	public String eliminarCita(@PathVariable Integer id, RedirectAttributes redirect) {
-		citaService.eliminar(id);
-		redirect.addFlashAttribute("mensajeExito", "Cita eliminada correctamente.");
-		return "redirect:/recepcionista/cita/listar";
+	@GetMapping("/cancelar/{id}")
+	public String cancelarCita(@PathVariable Integer id, RedirectAttributes redirect) {
+	    Cita cita = citaService.buscarCitaPorId(id);
+	    if (cita != null && cita.getEstado() == EstadoCita.PENDIENTE) {
+	        citaService.actualizarEstadoCita(cita, EstadoCita.CANCELADO);
+	        redirect.addFlashAttribute("success", "Cita cancelada correctamente.");
+	    } else {
+	        redirect.addFlashAttribute("error", "No se puede cancelar esta cita.");
+	    }
+	    return "redirect:/recepcionista/cita/listar";
 	}
+	
+    @GetMapping("/detalle/{id}")
+    public String verDetalleCita(@PathVariable("id") Integer id, Model model) {
+        // Buscar cita por ID
+        Cita cita = citaService.buscarCitaPorId(id);
+        if (cita == null) {
+            model.addAttribute("error", "Cita no encontrada");
+            return "redirect:/recepcionista/cita/listar";
+        }
 
+        // Pasar la cita al modelo
+        model.addAttribute("cita", cita);
 
-
+        // Retornar la vista detalle
+        return "Recepcionista/cita/detalleCita";
+    }
 }

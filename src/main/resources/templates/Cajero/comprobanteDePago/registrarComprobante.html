@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{Cajero/cajeroLayout}">
+<head>
+    <title>Registrar Comprobante de Pago</title>
+</head>
+<body>
+
+<main class="container mt-4" layout:fragment="contenido">
+
+    <h2 class="mb-4">Registrar Comprobante de Pago</h2>
+
+    <form th:action="@{/cajero/comprobanteDePago/guardar}" method="post">
+        
+        <!-- Campo para seleccionar cita -->
+        <div class="mb-3">
+            <label for="citaSeleccionada" class="form-label">Cita</label>
+            <div class="input-group">
+                <input type="hidden" name="idCita" id="idCita">
+                <input type="text" class="form-control" id="citaSeleccionada" placeholder="Seleccione una cita" readonly>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#buscarCitaModal">
+                    Buscar Cita
+                </button>
+            </div>
+        </div>
+
+        <!-- Campos bloqueados para mostrar información de la cita -->
+        <div class="mb-3">
+            <label class="form-label">Paciente</label>
+            <input type="text" class="form-control" id="pacienteInfo" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Motivo</label>
+            <input type="text" class="form-control" id="motivoInfo" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="text" class="form-control" id="fechaInfo" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Hora</label>
+            <input type="text" class="form-control" id="horaInfo" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Médico</label>
+            <input type="text" class="form-control" id="medicoInfo" readonly>
+        </div>
+
+        <!-- Datos del pagador -->
+
+		<!-- Nombre Pagador -->
+		<div class="mb-3">
+		    <label for="nombrePagador" class="form-label">Nombre Pagador</label>
+		    <input type="text" class="form-control" id="nombrePagador" name="nombrePagador" 
+		           pattern="[A-Za-z\s]{2,50}" title="Solo letras, 2-50 caracteres" required>
+		</div>
+
+		<!-- Apellidos Pagador -->
+		<div class="mb-3">
+		    <label for="apellidosPagador" class="form-label">Apellidos Pagador</label>
+		    <input type="text" class="form-control" id="apellidosPagador" name="apellidosPagador" 
+		           pattern="[A-Za-z\s]{2,50}" title="Solo letras, 2-50 caracteres" required>
+		</div>
+
+		<!-- DNI Pagador -->
+		<div class="mb-3">
+		    <label for="dniPagador" class="form-label">DNI Pagador</label>
+		    <input type="text" class="form-control" id="dniPagador" name="dniPagador" 
+		           pattern="\d{8}" title="DNI de 8 dígitos" required>
+		</div>
+		
+		<!-- Contacto Pagador -->
+		<div class="mb-3">
+		    <label for="contactoPagador" class="form-label">Contacto Pagador</label>
+		    <input type="text" class="form-control" id="contactoPagador" name="contactoPagador" 
+		           pattern="\d{7,15}" title="Ingrese un número de 7 a 15 dígitos" required>
+		</div>
+
+		
+		<div class="mb-3"> <label for="metodoPago" class="form-label">Método de Pago</label> 
+			<select class="form-control" id="metodoPago" name="metodoPago" required> 
+			<option value="">Seleccione...</option> 
+			<option th:each="mp : ${metodosPago}" th:value="${mp}" th:text="${mp}"></option> 
+			</select> 
+		</div>
+
+		<!-- Monto -->
+		<div class="mb-3">
+		    <label for="monto" class="form-label">Monto</label>
+		    <input type="number" class="form-control" id="monto" name="monto" 
+		           step="0.01" min="0.01" title="Monto mayor a 0" required>
+		</div>
+
+        <button type="submit" class="btn btn-primary">Registrar Comprobante</button>
+    </form>
+
+	<div th:replace="~{Cajero/comprobanteDePago/modalSeleccionarCita :: buscarCitaModal}"></div>
+	
+</main>
+
+
+
+<th:block layout:fragment="scripts">
+	<script src="/js/cdp.js"></script>
+</th:block>
+
+</body>
+</html>
