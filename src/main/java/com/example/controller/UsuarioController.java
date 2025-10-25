@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,10 +67,16 @@ public class UsuarioController {
 
     // 🔹 Procesar formulario de registro
     @PostMapping("/admin/registro")
-    public String registrarUsuario(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttrs) {
-        usuarioService.registrarUsuario(usuario);
-        redirectAttrs.addFlashAttribute("mensaje", "Usuario registrado con éxito.");
-        return "redirect:/usuarios/admin/home"; // redirige al formulario de registro
+    public String registrarUsuario(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttrs, Model model) {
+        try {
+            usuarioService.registrarUsuario(usuario);
+            redirectAttrs.addFlashAttribute("mensaje", "Usuario registrado con éxito.");
+            return "redirect:/usuarios/admin/home"; 
+        } catch (Exception e) {
+            model.addAttribute("error", "Ocurrió un error");
+            model.addAttribute("usuario", usuario); 
+            return "Admin/registro"; 
+        }
     }
 
     @GetMapping("/admin/editar")
@@ -92,14 +97,20 @@ public class UsuarioController {
     @PostMapping("/admin/actualizar")
     public String actualizarUsuario(@ModelAttribute Usuario usuario,
                                     @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
-                                    RedirectAttributes redirectAttributes) {
-        
-        Usuario usuarioActual = usuarioService.buscarPorNombre(user.getUsername());
-        
-        usuarioService.actualizarUsuario(usuario, usuarioActual);
-        redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado con éxito.");
-        return "redirect:/usuarios/admin/home";
+                                    Model model) {
+
+        try {
+            Usuario usuarioActual = usuarioService.buscarPorNombre(user.getUsername());
+            usuarioService.actualizarUsuario(usuario, usuarioActual);
+
+            model.addAttribute("mensaje", "Usuario actualizado con éxito.");
+        } catch (Exception e) {
+            model.addAttribute("error", "Ocurrió un error.");
+        }
+
+        return "Admin/editar"; 
     }
+
 
 
 

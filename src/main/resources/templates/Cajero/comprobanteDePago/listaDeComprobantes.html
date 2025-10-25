@@ -2,112 +2,275 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Cajero/cajeroLayout}">
+
 <head>
+    <meta charset="UTF-8">
     <title>Lista de Comprobantes de Pago</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* ==== MISMO ESTILO QUE LISTADO DE CITAS ==== */
+        body {
+            background-color: #f4f7fb;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            padding: 20px 25px;
+        }
+
+        .card-header h4 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        .btn-success {
+            background-color: #28c76f;
+            border: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-success:hover {
+            background-color: #22b365;
+            transform: translateY(-1px);
+        }
+
+        .btn-info {
+            background-color: #4ba3ff;
+            border: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-info:hover {
+            background-color: #2f8ae0;
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background-color: #fcd34d; /* amarillo suave */
+            border: none;
+            font-weight: 500;
+            color: #343a40;
+            transition: all 0.2s ease;
+        }
+        .btn-warning:hover {
+            background-color: #fbbf24; /* hover más intenso */
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background-color: #e63946;
+            border: none;
+            font-weight: 500;
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-danger:hover {
+            background-color: #cf2f3c;
+            transform: translateY(-1px);
+        }
+
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .table thead {
+            background-color: #eaf2ff;
+            color: #0056b3;
+            font-weight: 700;
+        }
+
+        .table tbody td {
+            color: #343a40;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fbff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #edf4ff;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions .btn {
+            margin: 0 3px;
+        }
+
+        .no-data {
+            color: #777;
+            font-style: italic;
+        }
+
+        .input-group input {
+            border-radius: 8px 0 0 8px;
+            height: 40px;
+        }
+
+        .input-group .btn-primary {
+            background-color: #007bff;
+            border: none;
+            font-weight: 500;
+            height: 40px;
+        }
+
+        .input-group .btn-primary:hover {
+            background-color: #0069d9;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
+
 <body>
+<section layout:fragment="contenido">
+<div class="container">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4><i class="bi bi-receipt me-2"></i>Lista de Comprobantes de Pago</h4>
+        </div>
 
-<main class="container mt-4" layout:fragment="contenido">
+        <div class="card-body">
+            <!-- Botones superiores -->
+            <div class="d-flex justify-content-between mb-3">
+                <a th:href="@{/cajero/comprobanteDePago/registrar}" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Registrar Comprobante
+                </a>
+                <a th:href="@{/cajero/comprobanteDePago/reporte}" class="btn btn-outline-primary">
+                    <i class="bi bi-file-earmark-text"></i> Generar Reporte
+                </a>
+            </div>
+			
+			<form th:action="@{/cajero/comprobanteDePago/listar}" method="get" class="mb-3">
+			    <div class="input-group">
+					<input type="text" name="texto" class="form-control" placeholder="Buscar por DNI, nombre o apellido" th:value="${texto}">
+					<button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
+				</div>
+			</form>
 
-    <h2 class="mb-4">Lista de Comprobantes de Pago</h2>
-	<!-- Botón Registrar Comprobante -->
-	<a th:href="@{/cajero/comprobanteDePago/registrar}" class="btn btn-primary">
-	    Registrar Comprobante de Pago
-	</a>
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pagador</th>
+                            <th>DNI Pagador</th>
+                            <th>Paciente</th>
+                            <th>Fecha de Emisión</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="comprobante : ${comprobantes}">
+                            <td th:text="${comprobante.idComprobante}"></td>
+                            <td th:text="${comprobante.nombrePagador + ' ' + comprobante.apellidosPagador}"></td>
+                            <td th:text="${comprobante.dniPagador}"></td>
+                            <td th:text="${comprobante.cita.paciente.nombre + ' ' + comprobante.cita.paciente.apellido}"></td>
+                            <td th:text="${#temporals.format(comprobante.fechaEmision, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${#numbers.formatDecimal(comprobante.monto,1,2)}"></td>
+                            <td>
+                                <span th:text="${comprobante.estado}" 
+                                      th:classappend="${comprobante.estado.name == 'ANULADO'} ? 'badge bg-danger' : 'badge bg-success'">
+                                </span>
+                            </td>
+                            <td class="actions">
+                                <a th:href="@{/cajero/comprobanteDePago/detalle/{id}(id=${comprobante.idComprobante})}" class="btn btn-info btn-sm me-1">
+                                    Detalle
+                                </a>
 
-    <form th:action="@{/cajero/comprobanteDePago/listar}" method="get" class="mb-3 d-flex">
-        <input type="text" name="texto" class="form-control me-2" placeholder="Buscar por DNI, nombre o apellido"
-               th:value="${texto}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
+                                <button th:if="${comprobante.estado.name != 'ANULADO'}"
+                                        type="button" class="btn btn-warning btn-sm me-1"
+                                        th:data-id="${comprobante.idComprobante}"
+                                        onclick="confirmarAnular(this)">
+                                    Anular
+                                </button>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Pagador</th>
-                    <th>DNI Pagador</th>
-                    <th>Paciente</th>
-                    <th>Fecha de Emisión</th>
-                    <th>Monto</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="comprobante : ${comprobantes}">
-                    <td th:text="${comprobante.idComprobante}">1</td>
-                    <td th:text="${comprobante.nombrePagador + ' ' + comprobante.apellidosPagador}">Juan Pérez</td>
-                    <td th:text="${comprobante.dniPagador}">12345678</td>
-                    <td th:text="${comprobante.cita.paciente.nombre + ' ' + comprobante.cita.paciente.apellido}">Paciente Ejemplo</td>
-                    <td th:text="${#temporals.format(comprobante.fechaEmision, 'dd/MM/yyyy HH:mm')}">23/10/2025 14:30</td>
-                    <td th:text="${#numbers.formatDecimal(comprobante.monto, 1, 2)}">150.00</td>
-                    <td>
-                        <span th:text="${comprobante.estado}"
-                              th:classappend="${comprobante.estado == 'ANULADO'} ? 'badge bg-danger' : 'badge bg-success'">
-                            EMITIDO
-                        </span>
-                    </td>
-					
-					<td>
-					    <!-- Botón Ver Detalle -->
-					    <a th:href="@{/cajero/comprobanteDePago/detalle/{id}(id=${comprobante.idComprobante})}" 
-					       class="btn btn-sm btn-info me-1">
-					        Ver Detalle
-					    </a>
-
-					    <!-- Botón Anular con SweetAlert2 -->
-					    <button th:if="${comprobante.estado.name != 'ANULADO' and comprobante.cita.estado.name != 'ATENDIDO'}"
-					            type="button"
-					            class="btn btn-warning btn-sm me-1"
-					            th:data-id="${comprobante.idComprobante}"
-					            onclick="confirmarAnular(this)">
-					        Anular
-					    </button>
-
-					    <!-- Botón bloqueado si ya está anulado o la cita ya fue atendida -->
-					    <button th:if="${comprobante.estado.name == 'ANULADO' or comprobante.cita.estado.name == 'ATENDIDO'}"
-					            type="button"
-					            class="btn btn-warning btn-sm me-1" disabled>
-					        Anular
-					    </button>
-					</td>
-
-
-                </tr>
-                <tr th:if="${#lists.isEmpty(comprobantes)}">
-                    <td colspan="8" class="text-center">No se encontraron comprobantes</td>
-                </tr>
-            </tbody>
-        </table>
+                                <button th:if="${comprobante.estado.name == 'ANULADO'}"
+                                        type="button" class="btn btn-warning btn-sm me-1" disabled>
+                                    Anular
+                                </button>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(comprobantes)}">
+                            <td colspan="8" class="no-data">No se encontraron comprobantes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+</div>
 
-</main>
+<script th:inline="javascript">
+function confirmarAnular(btn) {
+    const id = btn.getAttribute('data-id');
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "No podrá revertir esta acción.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, anular',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = `/cajero/comprobanteDePago/anular?id=${id}`;
+        }
+    });
+}
 
-<th:block layout:fragment="scripts">
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script>
-	    function confirmarAnular(btn) {
-	        const id = btn.getAttribute('data-id');
-	        Swal.fire({
-	            title: '¿Está seguro?',
-	            text: "No podrá revertir esta acción.",
-	            icon: 'warning',
-	            showCancelButton: true,
-	            confirmButtonColor: '#3085d6',
-	            cancelButtonColor: '#d33',
-	            confirmButtonText: 'Sí, anular',
-	            cancelButtonText: 'Cancelar'
-	        }).then((result) => {
-	            if (result.isConfirmed) {
-	                // Redirige al endpoint de anulación
-	                window.location.href = `/cajero/comprobanteDePago/anular?id=${id}`;
-	            }
-	        });
-	    }
-	</script>
-</th:block>
+let success = /*[[${success}]]*/ null;
+let error = /*[[${error}]]*/ null;
 
+if (success) Swal.fire("Éxito", success, "success");
+if (error) Swal.fire("Error", error, "error");
+
+
+</script>
+</section>
 </body>
 </html>

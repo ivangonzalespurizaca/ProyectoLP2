@@ -3,165 +3,266 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{Admin/adminLayout}">
 <head>
-    <!-- 🔽 Fragmento para estilos personalizados -->
-    <th:block layout:fragment="estilos">
-        <style>
-            /* Opcional: mejora visual del título y tablas */
-            h3 {
-                font-weight: 600;
-                color: #0d6efd;
-            }
-            table th {
-                background-color: #f8f9fa;
-            }
-        </style>
-    </th:block>
+    <meta charset="UTF-8">
+    <title>Gestión de Horarios</title>
+
+    <!-- Bootstrap e íconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f7fb;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        /* === Encabezado principal === */
+        .header-bar {
+            background-color: #007bff;
+            color: white;
+            min-height: 70px;
+            border-radius: 12px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .header-bar h3 {
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* === Formularios y tablas === */
+        .card-form {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .card-form label {
+            font-weight: 500;
+        }
+
+        table {
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+        table thead {
+            background-color: #eaf2ff;
+            color: #0056b3;
+            font-weight: 700;
+        }
+        table tbody td {
+            font-weight: 400;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #f8fbff;
+        }
+        table tbody tr:hover {
+            background-color: #edf4ff;
+            transition: background-color 0.3s ease;
+        }
+        .no-data {
+            color: #777;
+            font-style: italic;
+        }
+
+        /* === Botones === */
+        .btn-success {
+            background-color: #28c76f;
+            border: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-success:hover {
+            background-color: #22b365;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-danger {
+            background-color: #e63946;
+            border: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-danger:hover {
+            background-color: #cf2f3c;
+        }
+    </style>
 </head>
-
 <body>
-    <!-- 🔽 Fragmento principal del contenido -->
-    <section layout:fragment="contenido">
+<section layout:fragment="contenido">
+<div class="container mt-4">
 
-        <div class="container mt-4">
-            <h3 class="mb-3">Gestión de Horarios</h3>
+    <!-- Encabezado -->
+    <div class="header-bar">
+        <h3><i class="bi bi-calendar-check me-2"></i>Gestión de Horarios</h3>
 
-            <!-- Información del médico -->
-            <form>
-                <div class="row mb-3">
-                    <div class="col-md-3">
-                        <label>DNI</label>
-                        <input id="medicoDni" th:value="${medico?.dni}" class="form-control" readonly>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Nombres</label>
-                        <input id="medicoNombres" th:value="${medico?.nombres}" class="form-control" readonly>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Apellidos</label>
-                        <input id="medicoApellidos" th:value="${medico?.apellidos}" class="form-control" readonly>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Especialidad</label>
-                        <input id="medicoEspecialidad" th:value="${medico?.especialidad?.nombreEspecialidad}" class="form-control" readonly>
-                    </div>
+    </div>
+
+    <!-- Información del médico -->
+    <div class="card-form mt-4">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label><i class="bi bi-credit-card-2-front me-1"></i>DNI</label>
+                <input id="medicoDni" th:value="${medico?.dni}" class="form-control" readonly>
+            </div>
+            <div class="col-md-3">
+                <label><i class="bi bi-person me-1"></i>Nombres</label>
+                <input id="medicoNombres" th:value="${medico?.nombres}" class="form-control" readonly>
+            </div>
+            <div class="col-md-3">
+                <label><i class="bi bi-person-badge me-1"></i>Apellidos</label>
+                <input id="medicoApellidos" th:value="${medico?.apellidos}" class="form-control" readonly>
+            </div>
+            <div class="col-md-3">
+                <label><i class="bi bi-heart-pulse me-1"></i>Especialidad</label>
+                <input id="medicoEspecialidad" th:value="${medico?.especialidad?.nombreEspecialidad}" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+	
+	<button class="btn btn-info d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modalMedico">
+	    <i class="bi bi-search me-1"></i>Buscar Médico
+	</button>
+
+    <!-- Modal de búsqueda de médicos -->
+    <div class="modal fade" id="modalMedico" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-3 shadow-sm">
+                <div class="modal-header" style="background-color:#007bff; color:white;">
+                    <h5 class="modal-title"><i class="bi bi-person-badge me-1"></i>Buscar Médico</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMedico">
-                    Buscar Médico
-                </button>
-            </form>
-
-            <hr>
-
-            <!-- Modal de búsqueda de médicos -->
-            <div class="modal fade" id="modalMedico" tabindex="-1">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Buscar Médico</h5>
-                            <button class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" id="buscadorMedico" class="form-control mb-3" placeholder="Buscar médico...">
-                            <button id="btnBuscarMedico" class="btn btn-primary mb-3">Buscar</button>
-
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Apellidos</th>
-                                        <th>Especialidad</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cuerpoMedicos"></tbody>
-                            </table>
-                        </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" id="buscadorMedico" class="form-control" placeholder="Buscar médico...">
+                        <button id="btnBuscarMedico" class="btn btn-info"><i class="bi bi-search"></i> Buscar</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Apellidos</th>
+                                    <th>Especialidad</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpoMedicos"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-            <hr>
-
-            <!-- Lista de horarios -->
-            <h5>Horarios Registrados</h5>
-            <table class="table table-bordered mt-2">
-                <thead>
-                    <tr>
-                        <th>Día</th>
-                        <th>Entrada</th>
-                        <th>Salida</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="hor : ${listaHorarios}">
-                        <td th:text="${hor.diaSemana}"></td>
-                        <td th:text="${hor.horarioEntrada}"></td>
-                        <td th:text="${hor.horarioSalida}"></td>
-                        <td>
-                            <a th:href="@{|/eliminar/${hor.idHorario}?idMedico=${medico.idMedico}|}" 
-                               class="btn btn-danger btn-sm">Eliminar</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(listaHorarios)}">
-                        <td colspan="4" class="text-center">No hay horarios registrados</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Formulario para registrar nuevo horario -->
-            <form th:action="@{/registrar}" th:object="${nuevoHorario}" method="post" class="mt-4">
-                <input type="hidden" id="medicoId" th:field="*{medico.idMedico}">
-                <div class="row">
-                    <div class="col-md-3">
-                        <label>Día</label>
-                        <select th:field="*{diaSemana}" class="form-select">
-                            <option value="" disabled selected>Seleccionar día</option>
-                            <option th:each="dia : ${T(com.example.entity.enums.DiaSemana).values()}"
-                                    th:value="${dia}" th:text="${dia}"></option>
-                        </select>
-                    </div>
-					<div class="col-md-3">
-					  <label>Hora Entrada</label>
-					  <select th:field="*{horarioEntrada}" class="form-select">
-					    <option value="">Seleccionar hora</option>
-					    <option th:each="h : ${#numbers.sequence(8,22)}"
-					            th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
-					            th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}"></option>
-					  </select>
-					</div>
-
-					<div class="col-md-3">
-					  <label>Hora Salida</label>
-					  <select th:field="*{horarioSalida}" class="form-select">
-					    <option value="">Seleccionar hora</option>
-					    <option th:each="h : ${#numbers.sequence(0,23)}"
-					            th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
-					            th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}"></option>
-					  </select>
-					</div>
-					
-					
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button class="btn btn-primary w-100">Registrar</button>
-                    </div>
-                </div>
-            </form>
         </div>
-    </section>
+    </div>
 
-    <!-- 🔽 Fragmento de scripts -->
-    <th:block layout:fragment="scripts">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-		
-		<script th:inline="javascript">
-		    let success = /*[[${success}]]*/ null;
-		    let error = /*[[${error}]]*/ null;
-		    let abrirModal = /*[[${abrirModal}]]*/ false;
-		</script>
+    <hr class="my-4">
 
+    <!-- Lista de horarios -->
+    <h5 class="mb-3"><i class="bi bi-table me-1"></i>Horarios Registrados</h5>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered text-center align-middle">
+            <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="hor : ${listaHorarios}">
+                    <td th:text="${hor.diaSemana}"></td>
+                    <td th:text="${hor.horarioEntrada}"></td>
+                    <td th:text="${hor.horarioSalida}"></td>
+                    <td>
+                        <a th:href="@{|/eliminar/${hor.idHorario}?idMedico=${medico.idMedico}|}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash me-1"></i>Eliminar
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(listaHorarios)}">
+                    <td colspan="4" class="no-data">No hay horarios registrados</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-		<script src="/js/horario.js"></script>
-    </th:block>
+    <!-- Formulario para registrar nuevo horario -->
+    <div class="card-form">
+        <form th:action="@{/registrar}" th:object="${nuevoHorario}" method="post">
+            <input type="hidden" id="medicoId" th:field="*{medico.idMedico}">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label>Día</label>
+                    <select th:field="*{diaSemana}" class="form-select">
+                        <option value="" disabled selected>Seleccionar día</option>
+                        <option th:each="dia : ${T(com.example.entity.enums.DiaSemana).values()}"
+                                th:value="${dia}" th:text="${dia}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Hora Entrada</label>
+                    <select th:field="*{horarioEntrada}" class="form-select">
+                        <option value="">Seleccionar hora</option>
+                        <option th:each="h : ${#numbers.sequence(8,22)}"
+                                th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
+                                th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Hora Salida</label>
+                    <select th:field="*{horarioSalida}" class="form-select">
+                        <option value="">Seleccionar hora</option>
+                        <option th:each="h : ${#numbers.sequence(0,23)}"
+                                th:value="${h < 10 ? '0' + h + ':00' : h + ':00'}"
+                                th:text="${h < 10 ? '0' + h + ':00' : h + ':00'}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-success w-100">
+                        <i class="bi bi-plus-circle me-1"></i>Registrar
+                    </button>
+                </div>
+				
+
+            </div>
+        </form>
+    </div>
+	<div class="d-flex justify-content-between mt-3">
+	    <a th:href="@{/gestionarHorarios}" class="btn btn-secondary" style="width:49%;">Limpiar</a>
+	</div>
+
+</div>
+</section>
+
+<!-- Scripts -->
+<th:block layout:fragment="scripts"> 
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+	<script th:inline="javascript"> let success = /*[[${success}]]*/ null; 
+	let error = /*[[${error}]]*/ null; 
+	let abrirModal = /*[[${abrirModal}]]*/ false; 
+	</script> 
+<script src="/js/horario.js"></script> 
+</th:block>
 </body>
 </html>

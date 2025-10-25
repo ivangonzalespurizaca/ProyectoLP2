@@ -58,13 +58,20 @@ public class EspecialidadController {
         return "redirect:/admin/especialidad/listar";
     }
 
-    // 🗑️ Eliminar especialidad
+ // 🗑️ Eliminar especialidad
     @GetMapping("/admin/especialidad/delete/{id}")
-    public String deleteEspecialiadad(@PathVariable Integer id, RedirectAttributes redirect) {
-        service.eliminarEspecialidadById(id);
-        redirect.addFlashAttribute("mensaje", "Especialidad eliminado correctamente.");
+    public String deleteEspecialidad(@PathVariable Integer id, RedirectAttributes redirect) {
+        try {
+            service.eliminarEspecialidadById(id); 
+
+            redirect.addFlashAttribute("mensaje", "Especialidad eliminada correctamente.");
+        } catch (Exception e) {
+            redirect.addFlashAttribute("error", "Ocurrió un error al eliminar la especialidad.");
+            e.printStackTrace(); 
+        }
         return "redirect:/admin/especialidad/listar";
     }
+
 	
 	
 	
