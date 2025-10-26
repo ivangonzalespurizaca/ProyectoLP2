@@ -65,8 +65,14 @@ public class PacienteController {
     // 🗑️ Eliminar paciente
     @GetMapping("/recepcionista/paciente/delete/{id}")
     public String deletePaciente(@PathVariable Integer id, RedirectAttributes redirect) {
-        service.eliminarPacienteById(id);
-        redirect.addFlashAttribute("mensaje", "Paciente eliminado correctamente.");
+        try {
+            service.eliminarPacienteById(id);
+            redirect.addFlashAttribute("mensaje", "Paciente eliminado correctamente.");
+        } catch (Exception e) {
+            redirect.addFlashAttribute("error", "Ocurrió un error al eliminar el paciente.");
+            e.printStackTrace(); // útil para depuración
+        }
         return "redirect:/recepcionista/paciente/listar";
     }
+
 }

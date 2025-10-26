@@ -73,7 +73,8 @@ public class HorarioController {
 	            redirect.addFlashAttribute("success", "Horario actualizado correctamente.");
 	        }
 	    } catch (Exception e) {
-	        redirect.addFlashAttribute("error", "Error al registrar o actualizar el horario.");
+	        redirect.addFlashAttribute("error", e.getMessage());
+	        e.printStackTrace();
 	    }
 	    return "redirect:/gestionarHorarios?idMedico=" + horario.getMedico().getIdMedico();
 	}

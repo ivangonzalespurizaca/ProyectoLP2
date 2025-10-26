@@ -32,5 +32,5 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 	    	       "  AND (c.paciente.dni = :dato " +
 	    	       "       OR LOWER(c.paciente.nombre) LIKE LOWER(CONCAT('%', :dato, '%')) " +
 	    	       "       OR LOWER(c.paciente.apellido) LIKE LOWER(CONCAT('%', :dato, '%')))")
-	    List<Cita> buscarCitasPendientesPorPaciente(@Param("estado") String estado, @Param("dato") String dato);
+	    List<Cita> buscarCitasPendientesPorPaciente(@Param("estado") EstadoCita estado, @Param("dato") String dato);
 }

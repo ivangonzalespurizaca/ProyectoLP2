@@ -22,7 +22,7 @@ public interface CitaService {
 	
 	public void eliminar(Integer idCita);
 	
-	public List<Cita> buscarPendientesPorPaciente(String estado, String dato);
+	public List<Cita> buscarPendientesPorPaciente(String dato);
 	
     public List<Cita> listarPorEstado(EstadoCita estado);
     

@@ -59,7 +59,7 @@ public class ComprobanteDePagoController {
         	EstadoCita estadoEnum = EstadoCita.valueOf("PENDIENTE");
             return citaService.listarPorEstado(estadoEnum);
         } else {
-            return citaService.buscarPendientesPorPaciente("PENDIENTE", texto);
+            return citaService.buscarPendientesPorPaciente(texto);
         }
     }
     
@@ -87,7 +87,7 @@ public class ComprobanteDePagoController {
             comprobanteService.anularComprobante(idComprobante);
 
             // Mensaje de éxito
-            redirectAttrs.addFlashAttribute("success", "Comprobante anulado correctamente y la cita volvió a pendiente.");
+            redirectAttrs.addFlashAttribute("success", "Comprobante anulado correctamente.");
         } catch (IllegalArgumentException e) {
             redirectAttrs.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {

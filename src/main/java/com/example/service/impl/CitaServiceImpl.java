@@ -107,8 +107,8 @@ public class CitaServiceImpl implements CitaService {
 	}
 
 	@Override
-	public List<Cita> buscarPendientesPorPaciente(String estado, String dato) {
-		return citaRepository.buscarPorNombreOApellido(dato);
+	public List<Cita> buscarPendientesPorPaciente(String dato) {
+		return citaRepository.buscarCitasPendientesPorPaciente(EstadoCita.PENDIENTE, dato);
 	}
 
 	@Override

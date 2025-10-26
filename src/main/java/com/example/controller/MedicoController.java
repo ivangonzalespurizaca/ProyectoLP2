@@ -72,12 +72,19 @@ public class MedicoController {
 	    return "redirect:/admin/medico/listar";
 	}	    
 	
-    @GetMapping("/admin/medico/delete/{id}")
-	public String deleteProducto(@PathVariable Integer id, RedirectAttributes redirect) {
-	    medicoService.eliminarMedicoById(id);
-	    redirect.addFlashAttribute("mensaje", "Medico eliminado correctamente.");
+	@GetMapping("/admin/medico/delete/{id}")
+	public String deleteMedico(@PathVariable Integer id, RedirectAttributes redirect) {
+	    try {
+	        medicoService.eliminarMedicoById(id);
+	        redirect.addFlashAttribute("mensaje", "Médico eliminado correctamente.");
+	    } catch (Exception e) {
+	        redirect.addFlashAttribute("error", "Ocurrió un error al eliminar el médico.");
+	        e.printStackTrace(); // útil para depuración
+	    }
 	    return "redirect:/admin/medico/listar";
-    }	
+	}
+
+
 
 	
 }
