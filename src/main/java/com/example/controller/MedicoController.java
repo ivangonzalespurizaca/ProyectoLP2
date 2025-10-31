@@ -40,10 +40,15 @@ public class MedicoController {
 	
     //Guardar medico
     @PostMapping("/admin/medico")
-    public String saveMedico(Medico medico, RedirectAttributes redirect) {	 
-    	medicoService.guardarMedico(medico);
-    	redirect.addFlashAttribute("mensaje", "Medico registrado correctamente.");   
-       	return "redirect:/admin/medico/listar";
+    public String saveMedico(Medico medico, RedirectAttributes redirect) {
+    	try {
+        	medicoService.guardarMedico(medico);
+        	redirect.addFlashAttribute("mensaje", "Medico registrado correctamente.");   
+           	return "redirect:/admin/medico/listar";
+		} catch (Exception e) {
+        	redirect.addFlashAttribute("error", "Error al registrar medico");   
+           	return "redirect:/admin/medico/listar";
+		}
     }
 	
     //Editar medico
@@ -58,18 +63,26 @@ public class MedicoController {
     //Actualizar Medico existente
 	@PostMapping("/admin/medico/update/{id}")
 	public String updateMedico(@PathVariable Integer id, Medico medico, Model model, RedirectAttributes redirect) {
-		Medico existentMedico = medicoService.buscarMedicoPorId(id);
-		existentMedico.setIdMedico(id);
-		existentMedico.setNombres(medico.getNombres());
-		existentMedico.setApellidos(medico.getApellidos());
-		existentMedico.setDni(medico.getDni());
-		existentMedico.setNroColegiatura(medico.getNroColegiatura());
-		existentMedico.setTelefono(medico.getTelefono());
-		existentMedico.setEspecialidad(medico.getEspecialidad());
-		medicoService.actualizarMedico(existentMedico);
-		  redirect.addFlashAttribute("mensaje", "Medico actualizado correctamente.");
-	       
-	    return "redirect:/admin/medico/listar";
+		try {
+			Medico existentMedico = medicoService.buscarMedicoPorId(id);
+			existentMedico.setIdMedico(id);
+			existentMedico.setNombres(medico.getNombres());
+			existentMedico.setApellidos(medico.getApellidos());
+			existentMedico.setDni(medico.getDni());
+			existentMedico.setNroColegiatura(medico.getNroColegiatura());
+			existentMedico.setTelefono(medico.getTelefono());
+			existentMedico.setEspecialidad(medico.getEspecialidad());
+			medicoService.actualizarMedico(existentMedico);
+			redirect.addFlashAttribute("mensaje", "Medico actualizado correctamente.");
+		    return "redirect:/admin/medico/listar";
+			
+		} catch (Exception e) {
+			redirect.addFlashAttribute("error", "Error al actualizar médico");
+		    return "redirect:/admin/medico/listar";
+		}
+		
+		
+
 	}	    
 	
 	@GetMapping("/admin/medico/delete/{id}")

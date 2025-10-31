@@ -11,4 +11,5 @@ import com.example.entity.Medico;
 public interface MedicoRepository extends JpaRepository<Medico, Integer> {
 
      List<Medico> findByNombresStartingWithIgnoreCase(String nombre);
+     boolean existsByDni(String nombre);
 }

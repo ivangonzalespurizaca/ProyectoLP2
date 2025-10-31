@@ -3,8 +3,6 @@ package com.example.service;
 import com.example.entity.Usuario;
 import com.example.repository.UsuarioRepository;
 
-import java.util.Optional;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +52,14 @@ public class UsuarioService {
     
     public Usuario buscarPorNombre(String nombre) {
         Usuario usuario = usuarioRepository.findByUsername(nombre);
+        if (usuario == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        return usuario;
+    }
+    
+    public Usuario buscarPorID(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).get();
         if (usuario == null) {
             throw new RuntimeException("Usuario no encontrado");
         }

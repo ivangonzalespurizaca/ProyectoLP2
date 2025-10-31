@@ -18,4 +18,5 @@ public interface HorarioRepository extends JpaRepository<Horario, Integer> {
     
     @Query("SELECT h FROM Horario h WHERE h.medico.idMedico = :idMedico")
     List<Horario> findByMedico(@Param("idMedico") Integer idMedico);
+    List<Horario> findByMedico_IdMedicoAndDiaSemana(Integer idMedico, DiaSemana dia);
 }
