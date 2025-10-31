@@ -165,8 +165,10 @@
 
         <!-- Perfil del usuario -->
         <div class="profile-section">
-            <img th:src="${usuarioActual.imgPerfil != null} ? @{/images/{file}(file=${usuarioActual.imgPerfil})} : @{/images/default-user.jpg}" 
-                 alt="Foto de perfil del usuario">
+			<img th:src="${usuarioActual.imgPerfil != null} ?
+			             @{${usuarioActual.imgPerfil}} :
+			             @{/images/default-user.jpg}"
+			     alt="Foto de perfil del usuario">
 
             <form th:action="@{/usuarios/logout}" method="post">
                 <button type="submit" class="logout-btn">

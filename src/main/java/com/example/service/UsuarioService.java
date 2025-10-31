@@ -35,6 +35,7 @@ public class UsuarioService {
         usuarioExistente.setDni(usuarioActualizado.getDni());
         usuarioExistente.setTelefono(usuarioActualizado.getTelefono());
         usuarioExistente.setCorreo(usuarioActualizado.getCorreo());
+        usuarioExistente.setImgPerfil(usuarioActualizado.getImgPerfil());
 
         // si el usuario está actualizando su propio perfil → mantener su rol
         if (usuarioActualizado.getId().equals(usuarioActual.getId())) {
