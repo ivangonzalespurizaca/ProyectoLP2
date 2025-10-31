@@ -176,9 +176,9 @@
                 <a th:href="@{/cajero/comprobanteDePago/registrar}" class="btn btn-success">
                     <i class="bi bi-plus-circle"></i> Registrar Comprobante
                 </a>
-                <a th:href="@{/cajero/comprobanteDePago/reporte}" class="btn btn-outline-primary">
-                    <i class="bi bi-file-earmark-text"></i> Generar Reporte
-                </a>
+                <a th:href="@{/cajero/ReporteCP}" class="btn btn-outline-primary" target="_blank">
+			        <i class="bi bi-file-earmark-text"></i> Generar Reporte
+			    </a>
             </div>
 			
 			<form th:action="@{/cajero/comprobanteDePago/listar}" method="get" class="mb-3">

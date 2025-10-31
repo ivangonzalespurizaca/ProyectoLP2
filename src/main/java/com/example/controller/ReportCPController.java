@@ -16,21 +16,22 @@ import java.util.Map;
 import net.sf.jasperreports.engine.*;
 
 @Controller
-public class ReportController {
+public class ReportCPController {
 
     @Autowired
     private DataSource dataSource;
 
-    @GetMapping("/citas/ReporteCitas")
-    public void CitasReportes(
+    @GetMapping("/cajero/ReporteCP")
+    public void ReporteCP(
             HttpServletResponse response) {
         try {
             // ✅ Cargar el archivo .jasper desde resources/reportes
-            InputStream reportStream = new ClassPathResource("reportes/Reportecitas.jasper").getInputStream();
+            InputStream reportStream = new ClassPathResource("reportes/ComprobanteDePago.jasper").getInputStream();
 
             // ✅ Parámetros para Jasper
             Map<String, Object> params = new HashMap<>();
-            params.put("REPORT_DIR", new ClassPathResource("reportes/").getFile().getAbsolutePath() + "/");
+            params.put("REPORT_DIR", new ClassPathResource("/reportes/").getFile().getAbsolutePath() + "/");
+
          
 
             // ✅ Llenar el reporte con la conexión del pool de Spring
@@ -38,7 +39,7 @@ public class ReportController {
 
             // ✅ Configurar salida PDF
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "inline; filename=ReporteCitas.pdf");
+            response.setHeader("Content-Disposition", "inline; filename=ReporteComprobanteDePago.pdf");
 
             // ✅ Exportar el reporte
             JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
