@@ -34,9 +34,14 @@ public class EspecialidadController {
     // 💾 Guardar Especialidad nuevo
     @PostMapping("/admin/especialidad")
     public String saveEspecialidad(Especialidad especialidad, RedirectAttributes redirect) {
-        service.guardarEspecialidad(especialidad);
-        redirect.addFlashAttribute("mensaje", "Especialidad registrado correctamente.");
-        return "redirect:/admin/especialidad/listar";
+    	try {
+    		service.guardarEspecialidad(especialidad);
+	        redirect.addFlashAttribute("mensaje", "Especialidad registrado correctamente.");
+	        return "redirect:/admin/especialidad/listar";
+		} catch (Exception e) {
+	        redirect.addFlashAttribute("error", "Error al registrar especialidad");
+	        return "redirect:/admin/especialidad/listar";
+		}
     }
 
     // ✏️ Editar especialidad
@@ -50,12 +55,17 @@ public class EspecialidadController {
     // 🔄 Actualizar especialidad existente
     @PostMapping("/admin/especialidad/update/{id}")
     public String updateEspecialidad(@PathVariable Integer id, Especialidad especialidad, RedirectAttributes redirect) {
-        Especialidad existente = service.buscarEspecialidadById(id);
-        existente.setNombreEspecialidad(especialidad.getNombreEspecialidad());
-    
-        service.actualizarEspecialidad(existente);
-        redirect.addFlashAttribute("mensaje", "Especialidad actualizado correctamente.");
-        return "redirect:/admin/especialidad/listar";
+    	try {
+            Especialidad existente = service.buscarEspecialidadById(id);
+            existente.setNombreEspecialidad(especialidad.getNombreEspecialidad());
+        
+            service.actualizarEspecialidad(existente);
+            redirect.addFlashAttribute("mensaje", "Especialidad actualizado correctamente.");
+            return "redirect:/admin/especialidad/listar";
+		} catch (Exception e) {
+            redirect.addFlashAttribute("error", "Error al actualizar especialidad");
+            return "redirect:/admin/especialidad/listar";
+		}
     }
 
  // 🗑️ Eliminar especialidad

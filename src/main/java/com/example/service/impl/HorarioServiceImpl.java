@@ -34,27 +34,50 @@ public class HorarioServiceImpl implements HorarioService{
 
 	@Override
 	public Horario registrarHorario(Horario horario) {
-	    // Validación básica
-	    if (horario.getMedico() == null || horario.getHorarioEntrada() == null || horario.getHorarioSalida() == null) {
-	        throw new IllegalArgumentException("El horario debe tener médico, hora de inicio y hora de fin.");
+	    // 🔹 Validaciones básicas
+	    if (horario == null) {
+	        throw new IllegalArgumentException("El objeto horario no puede ser nulo.");
 	    }
 
-	    if (horario.getHorarioSalida().isBefore(horario.getHorarioEntrada()) || horario.getHorarioSalida() == (horario.getHorarioEntrada())) {
-	        throw new IllegalArgumentException("La hora de fin debe ser después de la hora de inicio.");
+	    if (horario.getMedico() == null) {
+	        throw new IllegalArgumentException("Debe seleccionar un médico.");
 	    }
 
-	    // Validar que no exista otro horario solapado para el mismo médico
-	    List<Horario> horariosExistentes = horarioRepository.findByMedico_idMedico(horario.getMedico().getIdMedico());
-	    boolean solapado = horariosExistentes.stream().anyMatch(h -> 
-	        (horario.getHorarioEntrada().isBefore(h.getHorarioSalida()) && horario.getHorarioSalida().isAfter(h.getHorarioEntrada()))
+	    if (horario.getDiaSemana() == null) {
+	        throw new IllegalArgumentException("Debe seleccionar un día válido.");
+	    }
+
+	    if (horario.getHorarioEntrada() == null || horario.getHorarioSalida() == null) {
+	        throw new IllegalArgumentException("Debe especificar hora de inicio y hora de fin.");
+	    }
+
+	    if (!horario.getHorarioSalida().isAfter(horario.getHorarioEntrada())) {
+	        throw new IllegalArgumentException("La hora de salida debe ser posterior a la hora de entrada.");
+	    }
+
+	    // 🔹 Buscar solo horarios del mismo médico y mismo día
+	    List<Horario> horariosMismoDia = horarioRepository.findByMedico_IdMedicoAndDiaSemana(
+	        horario.getMedico().getIdMedico(),
+	        horario.getDiaSemana()
 	    );
+
+	    // 🔹 Validar solapamiento solo dentro del mismo día
+	    boolean solapado = horariosMismoDia.stream().anyMatch(h ->
+	        horario.getHorarioEntrada().isBefore(h.getHorarioSalida()) &&
+	        horario.getHorarioSalida().isAfter(h.getHorarioEntrada())
+	    );
+
 	    if (solapado) {
-	        throw new IllegalArgumentException("El horario se solapa con otro horario existente del médico.");
+	        throw new IllegalArgumentException(
+	            "El horario se solapa con otro horario existente del mismo día para este médico."
+	        );
 	    }
 
-	    // Guardar horario si todo está bien
+	    // 🔹 Guardar si todo está correcto
 	    return horarioRepository.save(horario);
 	}
+
+
 
 
 	@Override

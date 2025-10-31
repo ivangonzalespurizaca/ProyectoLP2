@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -125,67 +123,52 @@ public class UsuarioController {
 
 
     @PostMapping("/admin/actualizar")
-    public String actualizarUsuario(@ModelAttribute Usuario usuario, @RequestParam("archivoImagen") MultipartFile imgPerfil,
-                                    @AuthenticationPrincipal org.springframework.security.core.userdetails.User user,
+    public String actualizarUsuario(@ModelAttribute Usuario usuario,
+                                    @RequestParam("archivoImagen") MultipartFile imgPerfil,
                                     Model model) {
-
         try {
-            Usuario usuarioActual = usuarioService.buscarPorNombre(user.getUsername());
-
-            if (usuarioActual == null) {
-                model.addAttribute("error", "Usuario no encontrado.");
+            // --- Obtener el usuario antiguo desde BD ---
+            Usuario usuarioAntiguo = usuarioService.buscarPorID(usuario.getId());
+            if (usuarioAntiguo == null) {
+                model.addAttribute("error", "Usuario a editar no encontrado.");
                 return "Admin/editar";
             }
 
-            // --- Si sube una nueva imagen ---
+            // --- Manejo de imagen ---
             if (!imgPerfil.isEmpty()) {
                 String folder = "uploads/";
                 File directorio = new File(folder);
-                if (!directorio.exists()) {
-                    directorio.mkdirs();
-                }
+                if (!directorio.exists()) directorio.mkdirs();
 
-                // Generar nombre único para evitar colisiones
                 String nombreArchivo = System.currentTimeMillis() + "_" + imgPerfil.getOriginalFilename();
                 Path rutaArchivo = Paths.get(folder + nombreArchivo);
                 Files.write(rutaArchivo, imgPerfil.getBytes());
 
-                // Eliminar la imagen anterior si existe y no es la por defecto
-                if (usuarioActual.getImgPerfil() != null
-                        && !usuarioActual.getImgPerfil().equals("/images/default-user.jpg")) {
-                    Path rutaAntigua = Paths.get(usuarioActual.getImgPerfil().replaceFirst("^/+", ""));
+                // Eliminar imagen anterior si no es la por defecto
+                if (usuarioAntiguo.getImgPerfil() != null
+                        && !usuarioAntiguo.getImgPerfil().equals("/images/default-user.jpg")) {
+                    Path rutaAntigua = Paths.get(usuarioAntiguo.getImgPerfil().replaceFirst("^/+", ""));
                     File archivoAntiguo = rutaAntigua.toFile();
-                    if (archivoAntiguo.exists()) {
-                        archivoAntiguo.delete();
-                    }
+                    if (archivoAntiguo.exists()) archivoAntiguo.delete();
                 }
 
-                // Guardar la nueva ruta
                 usuario.setImgPerfil("/uploads/" + nombreArchivo);
             } else {
-                // Mantiene la imagen anterior
-                usuario.setImgPerfil(usuarioActual.getImgPerfil());
-            }          
-            
-            usuarioService.actualizarUsuario(usuario, usuarioActual);
+                // Mantener imagen anterior
+                usuario.setImgPerfil(usuarioAntiguo.getImgPerfil());
+            }
+
+            // --- Pasar ambos usuarios al servicio ---
+            usuarioService.actualizarUsuario(usuario, usuarioAntiguo);
 
             model.addAttribute("mensaje", "Usuario actualizado con éxito.");
         } catch (IOException e) {
             e.printStackTrace();
             model.addAttribute("error", "Error al guardar la imagen.");
-        }catch (Exception e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("error", "Ocurrió un error.");
         }
-
-        return "Admin/editar"; 
-    }
-
-
-
-
-
-    
-
-
-    
+        return "Admin/editar";
+    }  
 }

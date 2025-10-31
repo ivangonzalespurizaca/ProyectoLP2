@@ -34,9 +34,16 @@ public class PacienteController {
     // 💾 Guardar paciente nuevo
     @PostMapping("/recepcionista/paciente")
     public String savePaciente(Paciente paciente, RedirectAttributes redirect) {
-        service.guardarPaciente(paciente);
-        redirect.addFlashAttribute("mensaje", "Paciente registrado correctamente.");
-        return "redirect:/recepcionista/paciente/listar";
+    	try {
+            service.guardarPaciente(paciente);
+            redirect.addFlashAttribute("mensaje", "Paciente registrado correctamente.");
+            return "redirect:/recepcionista/paciente/listar";
+		} catch (Exception e) {
+            redirect.addFlashAttribute("error", "Error al registrar Paciente.");
+            return "redirect:/recepcionista/paciente/listar";
+		}
+    	
+
     }
 
     // ✏️ Editar paciente
@@ -50,16 +57,21 @@ public class PacienteController {
     // 🔄 Actualizar paciente existente
     @PostMapping("/recepcionista/paciente/update/{id}")
     public String updatePaciente(@PathVariable Integer id, Paciente paciente, RedirectAttributes redirect) {
-        Paciente existente = service.buscarPacienteById(id);
-        existente.setNombre(paciente.getNombre());
-        existente.setApellido(paciente.getApellido());
-        existente.setDni(paciente.getDni());
-        existente.setTelefono(paciente.getTelefono());
-        existente.setFechaNacimiento(paciente.getFechaNacimiento());
+    	try {
+            Paciente existente = service.buscarPacienteById(id);
+            existente.setNombre(paciente.getNombre());
+            existente.setApellido(paciente.getApellido());
+            existente.setDni(paciente.getDni());
+            existente.setTelefono(paciente.getTelefono());
+            existente.setFechaNacimiento(paciente.getFechaNacimiento());
 
-        service.actualizarPaciente(existente);
-        redirect.addFlashAttribute("mensaje", "Paciente actualizado correctamente.");
-        return "redirect:/recepcionista/paciente/listar";
+            service.actualizarPaciente(existente);
+            redirect.addFlashAttribute("mensaje", "Paciente actualizado correctamente.");
+            return "redirect:/recepcionista/paciente/listar";
+		} catch (Exception e) {
+            redirect.addFlashAttribute("error", "Error al actualizar paciente.");
+            return "redirect:/recepcionista/paciente/listar";
+		}
     }
 
     // 🗑️ Eliminar paciente
